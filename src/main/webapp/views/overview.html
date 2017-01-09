@@ -1,0 +1,415 @@
+<div class="row">
+    <div class="col-lg-12" ng-if="isDataLoading">
+        <h3 class="page-header text-asbestos"><strong>Loading Data&nbsp;<span class="one">.</span><span class="two">.</span><span class="three">.</span></strong></h3>
+    </div>
+
+    <div class="col-lg-12" ng-cloak ng-if="noDataForPublisher">
+        <h3 class="page-header text-asbestos"><strong>Reporting data not yet available. Please check back In 24-48 hours.</strong></h3>
+    </div>
+
+    <div class="col-lg-12" ng-cloak ng-if="noDemandSourcesForPublisher">
+        <h3 class="page-header text-asbestos"><strong>No Reporting data available.  If you've just added a demand source, it may take up to 24-48 hours for data to populate.</strong></h3>
+    </div>
+
+    <div class="col-lg-12" ng-cloak ng-if="loadingFailed">
+        <h3 class="page-header text-asbestos"><strong>Failed to retrieve reporting data. Please try again later.</strong></h3>
+    </div>
+</div>
+
+
+<div class="row" ng-if="!isDataLoading">
+    <div class="col-lg-12">
+        <h3 class="page-header text-asbestos analytics">
+
+            <strong><popover-list-link source="impressionTypeFilters" list-item-name="name" list-item-select="selectImpressionTypeFilter(item)" title="Filters"><before-item ng-if="user.accountType=='FREE'"><a role="button" href="#/upgrade/from-free">Upgrade For Mobile &amp; Country Breakdown</a></before-item>{{currentImpressionTypeFilter.name}}</popover-list-link></strong>
+            <strong ng-if="showReportTypeMenu"><popover-list-link source="reportTypes" list-item-name="name" list-item-select="selectReportType(item)" title="Report Type">{{currentReportType.name}}</popover-list-link></strong>
+            Data For
+            <strong ng-if="!showPublisherMenu && !showAdvertiserMenu">{{currentDrillDownName}}</strong>
+            <strong ng-if="showPublisherMenu"><popover-list-link source="publishers" list-item-name="name" list-item-select="selectDrillDownItem(item)" title="Publishers"><before-item ng-if="user.accountType!='FREE'"><a role="button" ng-click="setPublisher(null)">All Publishers</a></before-item><before-item ng-if="user.accountType=='FREE'"><a role="button" href="#/upgrade/from-free">Upgrade For Site Breakdown</a></before-item>{{currentDrillDownName}}</popover-list-link></strong>
+            <span ng-if="showPublisherMenu && showAdvertiserMenu">and</span>
+            <strong ng-if="showAdvertiserMenu"><popover-list-link source="advertisers" list-item-name="name" list-item-select="selectAdvertiserDrillDownItem(item)" title="Advertisers"><before-item ng-if="user.accountType!='FREE'"><a role="button" ng-click="setAdvertiser(null)">All Advertisers</a></before-item><before-item ng-if="user.accountType=='FREE'"><a role="button" href="#/upgrade/from-free">Upgrade For Advertiser Breakdown</a></before-item>{{currentAdvertiserDrillDownName}}</popover-list-link></strong>
+            for
+            <popover-date-range-picker-link title="Selected Dates" start-date="dates.startDate" end-date="dates.endDate"></popover-date-range-picker-link>
+        </h3>
+    </div>
+</div>
+
+<!-- ng-if="dashboardSummaryData" -->
+<div class="row dashboard-summary" id="dashboard-summary-standard" ng-if="summaryMode == 'standard'">
+    <div class="col-xs-12">
+        <div class="col-lg-2 col-lg-offset-1 col-md-4 col-sm-12">
+            <div class="panel panel-default">
+                <div class="panel-body thumb-boxes">
+                    <h4 class="panel-header">Requests</h4>
+                    <div ng-if="isDataLoading">
+                        <span class="one">.</span><span class="two">.</span><span class="three">.</span>
+                    </div>
+                    <p ng-if="!isDataLoading">{{dashboardSummaryData.requests|number}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-2 col-md-4 col-sm-12">
+            <div class="panel panel-default">
+                <div class="panel-body thumb-boxes">
+                    <h4 class="panel-header">Impressions</h4>
+                    <div ng-if="isDataLoading">
+                        <span class="one">.</span><span class="two">.</span><span class="three">.</span>
+                    </div>
+                    <p ng-if="!isDataLoading">{{dashboardSummaryData.impressions|number}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-2 col-md-4 col-sm-12">
+            <div class="panel panel-default">
+                <div class="panel-body thumb-boxes">
+                    <h4 class="panel-header">Fill Rate</h4>
+                    <div ng-if="isDataLoading">
+                        <span class="one">.</span><span class="two">.</span><span class="three">.</span>
+                    </div>
+                    <p ng-if="!isDataLoading">{{dashboardSummaryData.fill_rate}}%</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-2 col-md-4  col-md-offset-2 col-sm-12">
+            <div class="panel panel-default">
+                <div class="panel-body thumb-boxes">
+                    <h4 class="panel-header">Revenue</h4>
+                    <div ng-if="isDataLoading">
+                        <span class="one">.</span><span class="two">.</span><span class="three">.</span>
+                    </div>
+                    <p ng-if="!isDataLoading">${{(dashboardSummaryData.revenue/100)|number : 2}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-2 col-md-4 col-sm-12">
+            <div class="panel panel-default">
+                <div class="panel-body thumb-boxes">
+                    <h4 class="panel-header">eCPM</h4>
+                    <div ng-if="isDataLoading">
+                        <span class="one">.</span><span class="two">.</span><span class="three">.</span>
+                    </div>
+                    <p ng-if="!isDataLoading">${{(dashboardSummaryData.ecpm/100)|number : 2}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row dashboard-summary" id="dashboard-summary-reporting-pro" ng-if="summaryMode == 'reporting_pro'">
+    <div class="col-xs-12">
+        <div class="col-lg-4 col-md-4 col-sm-12">
+            <div class="panel panel-default">
+                <div class="panel-body thumb-boxes">
+                    <h4 class="panel-header">Impressions</h4>
+                    <div ng-if="isDataLoading">
+                        <span class="one">.</span><span class="two">.</span><span class="three">.</span>
+                    </div>
+                    <p ng-if="!isDataLoading">{{dashboardSummaryData.impressions|number}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-12">
+            <div class="panel panel-default">
+                <div class="panel-body thumb-boxes">
+                    <h4 class="panel-header">Revenue</h4>
+                    <div ng-if="isDataLoading">
+                        <span class="one">.</span><span class="two">.</span><span class="three">.</span>
+                    </div>
+                    <p ng-if="!isDataLoading">${{(dashboardSummaryData.revenue/100)|number : 2}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-12">
+            <div class="panel panel-default">
+                <div class="panel-body thumb-boxes">
+                    <h4 class="panel-header">eCPM</h4>
+                    <div ng-if="isDataLoading">
+                        <span class="one">.</span><span class="two">.</span><span class="three">.</span>
+                    </div>
+                    <p ng-if="!isDataLoading">${{(dashboardSummaryData.ecpm/100)|number : 2}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- ng-if="dashboardImpressionRequests" -->
+<div class="row" ng-if="hasGraph('RequestVsImpressions')">
+    <div class="panel panel-default">
+        <div class="panel-body dashboard-panel">
+            <h4 class="panel-header">Requests vs Impressions</h4>
+            <div style="height:300px;" ng-if="isDataLoading"></div>
+            <div ng-if="isDataLoading" style="position: absolute; z-index: 1000; left: 50%; top: 50%; margin-left: -35px; margin-top: -40px;">
+                <i class="fa fa-4x fa-spinner fa-spin"></i>
+            </div>
+            <div ng-if="!isDataLoading">
+                <div class="col-xs-12" style="height: 300px" ng-graph graph-data="dashboardImpressionRequests" graph-x-key="date" graph-y-keys="requests,impressions" graph-labels="Requests,Impressions" graph-types="area,area" graph-axis="left,left" ng-if="dashboardImpressionRequests"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ng-if="dashboardImpression" -->
+<div class="row" ng-if="hasGraph('Impressions')">
+    <div class="panel panel-default">
+        <div class="panel-body dashboard-panel">
+            <h4 class="panel-header">Impressions</h4>
+            <div style="height:300px;" ng-if="isDataLoading"></div>
+            <div ng-if="isDataLoading" style="position: absolute; z-index: 1000; left: 50%; top: 50%; margin-left: -35px; margin-top: -40px;">
+                <i class="fa fa-4x fa-spinner fa-spin"></i>
+            </div>
+            <div ng-if="!isDataLoading">
+                <div class="col-xs-12" style="height: 300px" ng-graph graph-data="dashboardImpressionRequests" graph-x-key="date" graph-y-keys="impressions" graph-labels="Impressions" graph-types="area" graph-axis="left" ng-if="dashboardImpressionRequests"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ng-if="dashboardRevenue" -->
+<!-- Publisher Revenue Graph -->
+<div class="row" ng-if="hasGraph('RevenueVsECPM')">
+    <div class="panel panel-default">
+        <div class="panel-body dashboard-panel">
+            <h4 class="panel-header">Revenue vs eCPM</h4>
+            <div ng-if="isDataLoading" style="position: absolute; z-index: 1000; left: 50%; top: 50%; margin-left: -35px; margin-top: -40px;">
+                <i class="fa fa-4x fa-spinner fa-spin"></i>
+            </div>
+            <div ng-if="!isDataLoading && dashboardRevenue">
+                <div class="col-xs-12" style="height: 300px" ng-graph graph-data="dashboardRevenue" graph-x-key="date" graph-y-keys="revenue,ecpm" graph-labels="Revenue,eCPM" graph-types="area,line" graph-axis="left,right" graph-left-unit="$" graph-right-unit="$"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ng-if="dashboardWahwahRevenue" -->
+<!-- Wahwah Revenue Graph -->
+<div class="row" ng-if="hasGraph('RevenueVsNetRevenueVsECPM')">
+    <div class="panel panel-default">
+        <div class="panel-body dashboard-panel">
+            <h4 class="panel-header">Revenue vs Net Revenue vs eCPM</h4>
+            <div style="height:300px;" ng-if="isDataLoading"></div>
+            <div ng-if="isDataLoading" style="position: absolute; z-index: 1000; left: 50%; top: 50%; margin-left: -35px; margin-top: -40px;">
+                <i class="fa fa-4x fa-spinner fa-spin"></i>
+            </div>
+            <div ng-if="!isDataLoading && dashboardWahwahRevenue">
+                <div class="col-xs-12" style="height: 300px" ng-graph graph-data="dashboardWahwahRevenue" graph-x-key="date" graph-y-keys="revenue,net_revenue,ecpm" graph-labels="Revenue,Net Revenue,eCPM" graph-types="area,area,line" graph-axis="left,left,right" graph-left-unit="$" graph-right-unit="$" ng-if="dashboardWahwahRevenue"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ul class="nav nav-tabs" ng-if="reportTabs && reportTabs.length > 0">
+    <li ng-repeat="tab in reportTabs" heading="{{tab.title}}" ng-class="{'disabled': tab.disabled, active:currentReportTab == tab}"><a ng-click="setReportTab(tab)">{{tab.title}}</a></li>
+    <li style="float: right">
+        <div class="col-lg-12 top-btn" style="margin-bottom: 0px; margin-top: -5px;">
+            <a class="btn btn-primary" ng-if="tableExportUrl" ng-href="{{tableExportUrl}}">Export</a>
+        </div>
+    </li>
+</ul>
+
+<div class="row" ng-if="currentReportTab.title == 'Publishers' && dashboardPubReport && dashboardPubReport.length > 0">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th ng-if="dashboardPubReport[0]['entity.type'] == 'publisher'"><span ng-click="togglePublisherPredicate('publisher_name')">Publisher <span class="caret" ng-if="publisherReportPredicate=='publisher_name'" ng-class="{'caret-reversed': !publisherReportReverse}"></span></span></th>
+                        <th ng-if="dashboardPubReport[0]['entity.type'] == 'site'"><span ng-click="togglePublisherPredicate('site_name')">Site <span class="caret" ng-if="publisherReportPredicate=='site_name'" ng-class="{'caret-reversed': !publisherReportReverse}"></span></span></th>
+                        <th ng-if="showRequestFields"><span ng-click="togglePublisherPredicate('requests')">Requests <span class="caret" ng-if="publisherReportPredicate=='requests'" ng-class="{'caret-reversed': !publisherReportReverse}"></span></span></th>
+                        <th><span ng-click="togglePublisherPredicate('impressions')">Impressions <span class="caret" ng-if="publisherReportPredicate=='impressions'" ng-class="{'caret-reversed': !publisherReportReverse}"></span></span></th>
+                        <th ng-if="showRequestFields"><span ng-click="togglePublisherPredicate('fill_rate')">Fill Rate <span class="caret" ng-if="publisherReportPredicate=='fill_rate'" ng-class="{'caret-reversed': !publisherReportReverse}"></span></span></th>
+                        <th><span ng-click="togglePublisherPredicate('revenue')">Revenue <span class="caret" ng-if="publisherReportPredicate=='revenue'" ng-class="{'caret-reversed': !publisherReportReverse}"></span></span></th>
+                        <th ng-if="!user.singlePublisherNetworkUser"><span ng-click="togglePublisherPredicate('publisher_revenue')">Publisher Revenue <span class="caret" ng-if="publisherReportPredicate=='publisher_revenue'" ng-class="{'caret-reversed': !publisherReportReverse}"></span></span></th>
+                        <th ng-if="!user.singlePublisherNetworkUser"><span ng-click="togglePublisherPredicate('net_revenue')">Net Revenue <span class="caret" ng-if="publisherReportPredicate=='net_revenue'" ng-class="{'caret-reversed': !publisherReportReverse}"></span></span></th>
+                        <th><span ng-click="togglePublisherPredicate('ecpm')">eCPM <span class="caret" ng-if="publisherReportPredicate=='ecpm'" ng-class="{'caret-reversed': !publisherReportReverse}"></span></span></th>
+                        <th ng-if="showRequestFields"><span ng-click="togglePublisherPredicate('rcpm')">rCPM <span class="caret" ng-if="publisherReportPredicate=='rcpm'" ng-class="{'caret-reversed': !publisherReportReverse}"></span></span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="lineItem in dashboardPubReport | orderBy:publisherReportPredicate:publisherReportReverse">
+                        <td ng-if="lineItem.publisher_id != null && dashboardPubReport[0]['entity.type'] == 'publisher'"><a ng-click="selectPublisher(lineItem)">{{lineItem.publisher_name}}</a></td>
+                        <td ng-if="lineItem.publisher_id == null && dashboardPubReport[0]['entity.type'] == 'publisher'">{{lineItem.publisher_name}}</td>
+                        <td ng-if="lineItem.site_id != null && dashboardPubReport[0]['entity.type'] == 'site'"><a ng-click="selectSite(lineItem)">{{lineItem.site_name}}</a></td>
+                        <td ng-if="lineItem.site_id == null && dashboardPubReport[0]['entity.type'] == 'site'">{{lineItem.site_name}}</td>
+                        <td ng-if="showRequestFields">{{lineItem.requests|number}}</td>
+                        <td>{{lineItem.impressions|number}}</td>
+                        <td ng-if="showRequestFields">{{lineItem.fill_rate|number}}%</td>
+                        <td>${{lineItem.revenue|number: 2}}</td>
+                        <td ng-if="!user.singlePublisherNetworkUser">${{lineItem.publisher_revenue|number: 2}}</td>
+                        <td ng-if="!user.singlePublisherNetworkUser">${{lineItem.net_revenue|number: 2}}</td>
+                        <td>${{lineItem.ecpm|number: 2}}</td>
+                        <td ng-if="showRequestFields">${{lineItem.rcpm|number: 2}}</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>Totals</th>
+                        <th ng-if="showRequestFields">{{dashboardPubReport.totals.requests|number}}</th>
+                        <th>{{dashboardPubReport.totals.impressions|number}}</th>
+                        <th ng-if="showRequestFields">{{dashboardPubReport.totals.fill_rate|number}}%</th>
+                        <th>${{dashboardPubReport.totals.revenue|number: 2}}</th>
+                        <th ng-if="!user.singlePublisherNetworkUser">${{dashboardPubReport.totals.publisher_revenue|number: 2}}</th>
+                        <th ng-if="!user.singlePublisherNetworkUser">${{dashboardPubReport.totals.net_revenue|number: 2}}</th>
+                        <th>${{dashboardPubReport.totals.ecpm|number: 2}}</th>
+                        <th ng-if="showRequestFields">${{dashboardPubReport.totals.rcpm|number: 2}}</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="row" ng-if="currentReportTab.title == 'Sites' && dashboardPubReport && dashboardPubReport.length > 0">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th ng-if="dashboardPubReport[0]['entity.type'] == 'site'"><span ng-click="togglePublisherPredicate('site_name')">Site <span class="caret" ng-if="publisherReportPredicate=='site_name'" ng-class="{'caret-reversed': !publisherReportReverse}"></span></span></th>
+                        <th><span ng-click="togglePublisherPredicate('requests')">Requests <span class="caret" ng-if="publisherReportPredicate=='requests'" ng-class="{'caret-reversed': !publisherReportReverse}"></span></span></th>
+                        <th><span ng-click="togglePublisherPredicate('impressions')">Impressions <span class="caret" ng-if="publisherReportPredicate=='impressions'" ng-class="{'caret-reversed': !publisherReportReverse}"></span></span></th>
+                        <th><span ng-click="togglePublisherPredicate('fill_rate')">Fill Rate <span class="caret" ng-if="publisherReportPredicate=='fill_rate'" ng-class="{'caret-reversed': !publisherReportReverse}"></span></span></th>
+                        <th><span ng-click="togglePublisherPredicate('publisher_revenue')">Revenue <span class="caret" ng-if="publisherReportPredicate=='publisher_revenue'" ng-class="{'caret-reversed': !publisherReportReverse}"></span></span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="lineItem in dashboardPubReport | orderBy:publisherReportPredicate:publisherReportReverse">
+                        <td ng-if="dashboardPubReport[0]['entity.type'] == 'site'">{{lineItem.site_name}}</td>
+                        <td>{{lineItem.requests|number}}</td>
+                        <td>{{lineItem.impressions|number}}</td>
+                        <td>{{lineItem.fill_rate|number}}%</td>
+                        <td>${{lineItem.publisher_revenue|number: 2}}</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>Total</th>
+                        <th>{{dashboardPubReport.totals.requests|number}}</th>
+                        <th>{{dashboardPubReport.totals.impressions|number}}</th>
+                        <th>{{dashboardPubReport.totals.fill_rate|number}}%</th>
+                        <th>${{dashboardPubReport.totals.publisher_revenue|number: 2}}</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="row" ng-if="currentReportTab.title == 'Dates' && dashboardDateReport && dashboardDateReport.length > 0">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th ng-if="dashboardDateReport[0]['entity.type'] == 'date'"><span ng-click="togglePublisherPredicate('date')">Date <span class="caret" ng-if="publisherReportPredicate=='date'" ng-class="{'caret-reversed': !publisherReportReverse}"></span></span></th>
+                    <th><span ng-click="togglePublisherPredicate('requests')">Requests <span class="caret" ng-if="publisherReportPredicate=='requests'" ng-class="{'caret-reversed': !publisherReportReverse}"></span></span></th>
+                    <th><span ng-click="togglePublisherPredicate('impressions')">Impressions <span class="caret" ng-if="publisherReportPredicate=='impressions'" ng-class="{'caret-reversed': !publisherReportReverse}"></span></span></th>
+                    <th><span ng-click="togglePublisherPredicate('fill_rate')">Fill Rate <span class="caret" ng-if="publisherReportPredicate=='fill_rate'" ng-class="{'caret-reversed': !publisherReportReverse}"></span></span></th>
+                    <th><span ng-click="togglePublisherPredicate('publisher_revenue')">Revenue <span class="caret" ng-if="publisherReportPredicate=='publisher_revenue'" ng-class="{'caret-reversed': !publisherReportReverse}"></span></span></th>
+                    <th ng-if="!isNaN(dashboardDateReport[0]['ecpm'])">eCPM</th>
+                    <th ng-if="!isNaN(dashboardDateReport[0]['rcpm'])">rCPM</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="lineItem in dashboardDateReport | orderBy:publisherReportPredicate:publisherReportReverse">
+                    <td ng-if="dashboardDateReport[0]['entity.type'] == 'date'">{{lineItem.date_formatted}}</td>
+                    <td>{{lineItem.requests|number}}</td>
+                    <td>{{lineItem.impressions|number}}</td>
+                    <td>{{lineItem.fill_rate|number}}%</td>
+                    <td>${{lineItem.revenue|number: 2}}</td>
+                    <td ng-if="!isNaN(lineItem['ecpm'])">${{lineItem.ecpm|number: 2}}</td>
+                    <td ng-if="!isNaN(lineItem['rcpm'])">${{lineItem.rcpm|number: 2}}</td>
+                </tr>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <th>Total</th>
+                    <th>{{dashboardDateReport.totals.requests|number}}</th>
+                    <th>{{dashboardDateReport.totals.impressions|number}}</th>
+                    <th>{{dashboardDateReport.totals.fill_rate|number}}%</th>
+                    <th>${{dashboardDateReport.totals.revenue|number: 2}}</th>
+                    <th ng-if="!isNaN(dashboardDateReport[0]['ecpm'])">${{dashboardDateReport.totals.ecpm|number: 2}}</th>
+                    <th ng-if="!isNaN(dashboardDateReport[0]['rcpm'])">${{dashboardDateReport.totals.rcpm|number: 2}}</th>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="row" ng-if="currentReportTab.title == 'Advertisers' && dashboardAdvertiserReport && dashboardAdvertiserReport.length > 0">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th ng-if="dashboardAdvertiserReport[0]['entity.type'] == 'advertiser'"><span ng-click="toggleAdvertiserPredicate('advertiser_name')">Advertiser <span class="caret" ng-if="advertiserReportPredicate=='advertiser_name'" ng-class="{'caret-reversed': !advertiserReportReverse}"></span></span></th>
+                        <th ng-if="dashboardAdvertiserReport[0]['entity.type'] == 'lineitem'"><span ng-click="toggleAdvertiserPredicate('lineitem_name')">Line Item <span class="caret" ng-if="advertiserReportPredicate=='lineitem_name'" ng-class="{'caret-reversed': !advertiserReportReverse}"></span></span></th>
+                        <th ng-if="showRequestFields"><span ng-click="toggleAdvertiserPredicate('requests')">Requests <span class="caret" ng-if="advertiserReportPredicate=='requests'" ng-class="{'caret-reversed': !advertiserReportReverse}"></span></span></th>
+                        <th><span ng-click="toggleAdvertiserPredicate('impressions')">Impressions <span class="caret" ng-if="advertiserReportPredicate=='impressions'" ng-class="{'caret-reversed': !advertiserReportReverse}"></span></span></th>
+                        <th ng-if="currentReportType.value != 'demand_source' && user.accountType != 'REPORTING_PRO'"><span ng-click="toggleAdvertiserPredicate('net_impressions')">Attributed Impressions <span class="caret" ng-if="advertiserReportPredicate=='net_impressions'" ng-class="{'caret-reversed': !advertiserReportReverse}"></span></span></th>
+                        <th ng-if="showRequestFields"><span ng-click="toggleAdvertiserPredicate('fill_rate')">Fill Rate <span class="caret" ng-if="advertiserReportPredicate=='fill_rate'" ng-class="{'caret-reversed': !advertiserReportReverse}"></span></span></th>
+                        <th><span ng-click="toggleAdvertiserPredicate('revenue')">Revenue <span class="caret" ng-if="advertiserReportPredicate=='revenue'" ng-class="{'caret-reversed': !advertiserReportReverse}"></span></span></th>
+                        <th ng-if="currentReportType.value != 'demand_source' && user.accountType != 'REPORTING_PRO'"><span ng-click="toggleAdvertiserPredicate('net_revenue')">Attributed Revenue <span class="caret" ng-if="advertiserReportPredicate=='net_revenue'" ng-class="{'caret-reversed': !advertiserReportReverse}"></span></span></th>
+                        <th ng-if="!isNaN(dashboardAdvertiserReport[0]['ecpm'])"><span ng-click="toggleAdvertiserPredicate('ecpm')">eCPM <span class="caret" ng-if="advertiserReportPredicate=='ecpm'" ng-class="{'caret-reversed': !advertiserReportReverse}"></span></span></th>
+                        <th ng-if="!isNaN(dashboardAdvertiserReport[0]['rcpm']) && showRequestFields"><span ng-click="toggleAdvertiserPredicate('rcpm')">rCPM <span class="caret" ng-if="advertiserReportPredicate=='rcpm'" ng-class="{'caret-reversed': !advertiserReportReverse}"></span></span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="lineItem in dashboardAdvertiserReport | orderBy:advertiserReportPredicate:advertiserReportReverse">
+                        <td ng-if="lineItem['entity.type'] == 'advertiser' && user.accountType == 'FREE'">{{lineItem.advertiser_name}}</td>
+                        <td ng-if="lineItem['entity.type'] == 'advertiser' && user.accountType != 'FREE'"><a ng-click="selectAdvertiser(lineItem)">{{lineItem.advertiser_name}}</a></td>
+                        <td ng-if="lineItem['entity.type'] == 'lineitem'">{{lineItem.lineitem_name}}</td>
+                        <td ng-if="showRequestFields">{{lineItem.requests|number}}</td>
+                        <td>{{lineItem.impressions|number}}</td>
+                        <td ng-if="currentReportType.value != 'demand_source' && user.accountType != 'REPORTING_PRO'">{{lineItem.net_impressions|number}}</td>
+                        <td ng-if="showRequestFields">{{lineItem.fill_rate|number}}%</td>
+                        <td>${{lineItem.revenue|number: 2}}</td>
+                        <td ng-if="currentReportType.value != 'demand_source' && user.accountType != 'REPORTING_PRO'">${{lineItem.net_revenue|number: 2}}</td>
+                        <td ng-if="!isNaN(lineItem['ecpm'])">${{lineItem.ecpm|number: 2}}</td>
+                        <td ng-if="!isNaN(lineItem['rcpm']) && showRequestFields">${{lineItem.rcpm|number: 2}}</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>Totals</th>
+                        <th ng-if="showRequestFields">{{dashboardAdvertiserReport.totals.requests|number}}</th>
+                        <th>{{dashboardAdvertiserReport.totals.impressions|number}}</th>
+                        <th ng-if="currentReportType.value != 'demand_source' && user.accountType != 'REPORTING_PRO'">{{dashboardAdvertiserReport.totals.net_impressions|number}}</th>
+                        <th ng-if="showRequestFields">{{dashboardAdvertiserReport.totals.fill_rate}}%</th>
+                        <th>${{dashboardAdvertiserReport.totals.revenue|number: 2}}</th>
+                        <th ng-if="currentReportType.value != 'demand_source' && user.accountType != 'REPORTING_PRO'">${{dashboardAdvertiserReport.totals.net_revenue|number: 2}}</th>
+                        <th ng-if="!isNaN(dashboardAdvertiserReport[0]['ecpm'])">${{dashboardAdvertiserReport.totals.ecpm|number: 2}}</th>
+                        <th ng-if="!isNaN(dashboardAdvertiserReport[0]['rcpm']) && showRequestFields">${{dashboardAdvertiserReport.totals.rcpm|number: 2}}</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+ <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;"> 
+    <div class="modal-dialog"> 
+        <div class="modal-content"> 
+            <div class="modal-header"> 
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button> 
+                <h4 class="modal-title" id="myModalLabel">No Reporting Data Available.</h4> 
+            </div> 
+            <div class="modal-body"> 
+                <p>If you've just added a demand source, it may take up to 24-48 hours for data to populate.</p> 
+                <p>Haven't set up a demand source yet?  <a href="#/demand-sources">Get started now</a>! </p> 
+            </div> 
+            <div class="modal-footer"> 
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button> 
+                <!-- <button type="button" class="btn btn-primary">Save changes</button> --> 
+            </div> 
+        </div>         <!-- /.modal-content -->
+    </div>
+</div>
+
+
+<div class="row" ng-if="dashboardSummaryData">
+    <p style="color: #e55445; margin-left: 10px; margin-top: -20px;"><strong>NOTE:</strong> Any reporting on this page is subject to audit and therefore may differ from final amounts payable. Data may be incomplete for impressions viewed in the last 48 hours.</p>
+</div>

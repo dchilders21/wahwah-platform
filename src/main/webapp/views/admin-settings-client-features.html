@@ -1,0 +1,103 @@
+<div class="row">
+    <div class="col-lg-12">
+
+        <ul class="breadcrumb no-margin no-header text-asbestos">
+            <li><h3 class="page-header-nomargin text-asbestos">Admin Options</h3></li>
+            <li><h3 class="page-header-nomargin text-asbestos">Client Feature Setup</h3></li>
+        </ul>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="alert alert-warning" ng-if="showDeleteClientFeatureAlert">
+            <button type="button" class="close" ng-click="hideDeleteWarning()">&times;</button>
+            <strong>Warning!</strong> The feature <em>{{featureToDelete.name}}</em> will be deleted and removed from all <a ng-click="showAssociatedSites(featureToDelete)" class="alert-link">associated sites</a> and cannot be recovered. <a ng-click="performDelete()" class="alert-link">Confirm Deletion</a>
+        </div>
+    </div>
+</div>
+
+<div class="row" ng-if="hasRole('DEVELOPER')">
+    <div class="col-lg-12 top-btn">
+        <button class="btn btn-primary" ng-click="showCreateFeaturePopup()">Create New Feature</button>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default" ng-if="features.length > 0">
+
+            <div class="panel-heading">Client Features</div>
+
+            <table class="table table-grid table-striped">
+                <thead>
+                <tr><th>Name</th><th>Description</th><th>Variable Label</th><th>Variable Name</th><th>Variable Type</th><th></th></tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="row in features | orderBy: 'name'">
+                    <td>{{row.name}}</td>
+                    <td>{{row.description}}</td>
+                    <td>{{row.variable_label}}</td>
+                    <td>{{row.variable_name}}</td>
+                    <td>{{variableTypes[row.variable_type]}}</td>
+                    <td>
+                        <a class="action-icon" ng-click="editFeature(row)" ng-if="hasRole('DEVELOPER')"><i class="fa fa-2x fa-edit"></i></a>
+                        <a class="action-icon" ng-click="deleteFeature(row)" ng-if="hasRole('DEVELOPER')"><i class="fa fa-2x fa-times"></i></a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <div class="panel-footer" style="text-align: right">
+                <button class="btn btn-primary" ng-click="save()" ng-disabled="isSaving">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="addClientFeatureModal" tabindex="-1" role="dialog" aria-labelledby="addClientFeatureModalLabel" aria-hidden="true" ng-show-modal="isAddingFeature || isEditingFeature" close="onAddFeatureClose()">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="addClientFeatureModalLabel"><span ng-if="isAddingFeature">Add Client Feature</span><span ng-if="isEditingFeature">Edit Client Feature</span></h4>
+            </div>
+            <div class="modal-body">
+
+                <form>
+                    <div class="form-group">
+                        <label for="add-feature-name">Feature Name</label>
+                        <input type="text" class="form-control" id="add-feature-name" placeholder="Enter feature name" ng-model="newFeature.name">
+                    </div>
+                    <div class="form-group">
+                        <label for="add-feature-description">Feature Description</label>
+                        <input type="text" class="form-control" id="add-feature-description" placeholder="Enter feature description" ng-model="newFeature.description">
+                    </div>
+                    <div class="form-group" ng-if="newFeature.variable_type != 'NONE'">
+                        <label for="add-feature-variable-label">Variable Label</label>
+                        <input type="text" class="form-control" id="add-feature-variable-label" placeholder="Enter variable label" ng-model="newFeature.variable_label">
+                    </div>
+                    <div class="form-group">
+                        <label for="add-feature-variable-name">Variable Name</label>
+                        <input type="text" class="form-control" id="add-feature-variable-name" placeholder="Enter variable name" ng-model="newFeature.variable_name">
+                    </div>
+                    <div class="form-group">
+                        <label for="add-feature-variable-type">Variable Type</label>
+                        <select class="form-control" ng-model="newFeature.variable_type" id="add-feature-variable-type">
+                            <option value="NONE">None</option>
+                            <option value="BOOLEAN">Boolean</option>
+                            <option value="STRING">String</option>
+                            <option value="NUMBER">Number</option>
+                        </select>
+                    </div>
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" ng-click="saveNewFeature()" ng-if="isAddingFeature">Save Feature</button>
+                <button type="button" class="btn btn-primary" ng-click="updateExistingFeature()" ng-if="isEditingFeature">Update Feature</button>
+            </div>
+        </div>
+    </div>
+</div>

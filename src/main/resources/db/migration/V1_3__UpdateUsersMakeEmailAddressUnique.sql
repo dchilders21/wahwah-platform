@@ -1,0 +1,1 @@
+ALTER TABLE users CHANGE email_address email_address VARCHAR(255) NOT NULL, ADD UNIQUE (email_address)

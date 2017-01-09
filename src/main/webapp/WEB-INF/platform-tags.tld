@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE taglib PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN" "http://java.sun.com/dtd/web-jsptaglibrary_1_2.dtd">
+<taglib>
+
+    <tlib-version>1.0</tlib-version>
+    <jsp-version>2.0</jsp-version>
+    <short-name>wahwah</short-name>
+    <uri>http://platform.wahwahnetworks.com/jsp/tags/</uri>
+    <description>Wahwah Networks Platform Tag Library</description>
+
+    <tag>
+        <name>script</name>
+        <tag-class>com.wahwahnetworks.platform.lib.taglib.PlatformScriptTag</tag-class>
+        <body-content>empty</body-content>
+        <description>This tag is for processing Platform script tags</description>
+        <attribute>
+            <name>src</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+    <tag>
+        <name>link</name>
+        <tag-class>com.wahwahnetworks.platform.lib.taglib.PlatformLinkTag</tag-class>
+        <body-content>empty</body-content>
+        <description>This tag is for processing Platform link tags</description>
+        <attribute>
+            <name>rel</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>href</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+</taglib>

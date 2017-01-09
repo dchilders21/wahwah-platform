@@ -1,0 +1,49 @@
+<Context path="/">
+
+    <!-- JDBC Database Connection -->
+	<ResourceLink global="jdbc/WahwahPlatform" name="jdbc/WahwahPlatform"/>
+    <!-- Edit Your conf/server.xml to have a Resource defined in GlobalNamingResources as such:
+
+	<Resource
+		name="jdbc/WahwahPlatform"
+		auth="Container"
+		type="javax.sql.DataSource"
+		maxActive="100"
+		maxIdle="30"
+		maxWait="10000"
+		driverClassName="com.mysql.jdbc.Driver"
+		username="username"
+		password="password"
+		url="jdbc:mysql://localhost/wahwahplatform"/>
+
+	-->
+
+    <!-- Email Configuration -->
+    <ResourceLink global="mail/WahwahPlatform" name="mail/WahwahPlatform"/>
+    <!-- Edit Your conf/server.xml to have a Resource defined in GlobalNamingResources as such:
+
+	<Resource name="mail/WahwahPlatform"
+              auth="Container"
+              type="javax.mail.Session"
+              username="username"
+              password="password"
+              mail.debug="true"
+              mail.user="username"
+              mail.password="password"
+              mail.transport.protocol="smtp"
+              mail.smtp.host="smtpserver"
+              mail.smtp.auth="true"
+              mail.smtp.port="25"
+              mail.smtp.starttls.enable="true"/>
+
+    -->
+
+    <!-- Environment -->
+    <ResourceLink global="environment_name" name="environment_name" type="java.lang.String"/>
+    <ResourceLink global="RedPandaRabbitHost" name="RedPandaRabbitHost" type="java.lang.String"/>
+    <ResourceLink global="RedPandaRabbitUser" name="RedPandaRabbitUser" type="java.lang.String"/>
+    <ResourceLink global="RedPandaRabbitPassword" name="RedPandaRabbitPassword" type="java.lang.String"/>
+
+    <ResourceLink global="RedPandaTagIntelligenceURL" name="RedPandaTagIntelligenceURL" type="java.lang.String"/>
+
+</Context>

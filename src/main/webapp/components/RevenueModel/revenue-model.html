@@ -1,0 +1,118 @@
+<div class="row">
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr><th>Start Date</th><th>End Date</th><th>Type</th><th>CPM (US Desktop)</th><th>CPM (Mobile &amp; Non-US)</th><th>Rev Split %</th><th>Minimum</th><th>Product Format</th></tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="revenueModel in $ctrl.revenueModels" ng-click="$ctrl.editRevenueModel(revenueModel)">
+                <td>
+                    <span ng-if="revenueModel.revenue_model_start_date">{{revenueModel.revenue_model_start_date}}</span>
+                    <span ng-if="!revenueModel.revenue_model_start_date">Initial</span>
+                </td>
+                <td>
+                    <span ng-if="revenueModel.revenue_model_end_date">{{revenueModel.revenue_model_end_date}}</span>
+                    <span ng-if="!revenueModel.revenue_model_end_date">Current</span>
+                </td>
+                <td>{{$ctrl.revenueModelTypes[revenueModel.revenue_model_type]}}</td>
+                <td>
+                    <span ng-if="revenueModel.us_desktop_gcpm">${{revenueModel.us_desktop_gcpm|number:2}}</span>
+                    <span ng-if="!revenueModel.us_desktop_gcpm">Rev Split</span>
+                </td>
+                <td>
+                    <span ng-if="revenueModel.gcpm">${{revenueModel.gcpm|number:2}}</span>
+                    <span ng-if="!revenueModel.gcpm">Rev Split</span>
+                </td>
+                <td>
+                    <span ng-if="revenueModel.revenue_share_percent">{{revenueModel.revenue_share_percent}} %</span>
+                    <span ng-if="!revenueModel.revenue_share_percent">N/A</span>
+                </td>
+                <td>
+                    <span ng-if="revenueModel.minimum_payout">${{revenueModel.minimum_payout|number:2}}<span ng-if="revenueModel.minimum_requests"> after {{revenueModel.minimum_requests|number}} requests</span></span>
+                    <span ng-if="!revenueModel.minimum_payout">None</span>
+
+                </td>
+                <td>{{$ctrl.formats[revenueModel.format]}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="row">
+    <div class="pull-right">
+        <button class="btn btn-primary" ng-click="$ctrl.addNew()">Add New</button>
+    </div>
+</div>
+
+
+<modal-dialog visible="$ctrl.revenueModelToEdit != null" on-close="$ctrl.revenueModelToEdit = null">
+    <modal-title><span ng-if="$ctrl.revenueModelToEdit.id == null">Add New Financial Model</span><span ng-if="$ctrl.revenueModelToEdit.id != null">Edit Financial Model</span></modal-title>
+    <modal-body>
+
+        <form role="form" name="revenueModelEditorForm">
+            <div ng-init="$ctrl.revenueModelEditorForm = revenueModelEditorForm"></div>
+            <!--
+            <div class="form-group">
+                <label for="revenue-model-type">Format</label>
+                <select class="form-control" id="revenue-model-format" ng-model="$ctrl.revenueModelToEdit.format" ng-options="key as value for (key,value) in $ctrl.formats"></select>
+            </div>
+            -->
+
+            <div class="form-group">
+                <label for="revenue-model-start-date">Start Date</label>
+                <date-picker id="revenue-model-start-date" selected-date="$ctrl.revenueModelToEdit.revenue_model_start_date"></date-picker>
+            </div>
+
+            <div class="form-group">
+                <label for="revenue-model-end-date">End Date</label>
+                <date-picker id="revenue-model-end-date" selected-date="$ctrl.revenueModelToEdit.revenue_model_end_date"></date-picker>
+            </div>
+
+            <div class="form-group">
+                <label for="revenue-model-type">Type</label>
+                <select class="form-control" id="revenue-model-type" ng-model="$ctrl.revenueModelToEdit.revenue_model_type" ng-options="key as value for (key,value) in $ctrl.revenueModelTypes" required></select>
+            </div>
+
+            <div class="form-group" ng-if="$ctrl.revenueModelToEdit.revenue_model_type && $ctrl.revenueModelToEdit.revenue_model_type != 'REVENUE_SHARE'">
+                <label for="revenue-model-gcpm-us">CPM (US Desktop)</label>
+                <div class="input-group">
+                    <div class="input-group-addon">$</div>
+                    <input class="form-control" type="text" id="revenue-model-gcpm-us" ng-model="$ctrl.revenueModelToEdit.us_desktop_gcpm" required>
+                </div>
+            </div>
+
+            <div class="form-group" ng-if="$ctrl.revenueModelToEdit.revenue_model_type && $ctrl.revenueModelToEdit.revenue_model_type != 'REVENUE_SHARE'">
+                <label for="revenue-model-gcpm">CPM (Mobile &amp; Other)</label>
+                <div class="input-group">
+                    <div class="input-group-addon">$</div>
+                    <input class="form-control" type="text" id="revenue-model-gcpm" ng-model="$ctrl.revenueModelToEdit.gcpm">
+                </div>
+            </div>
+
+            <div class="form-group" ng-if="$ctrl.revenueModelToEdit.revenue_model_type">
+                <label for="revenue-model-rev-split">Rev Split</label>
+                <div class="input-group">
+                    <input class="form-control" type="text" id="revenue-model-rev-split" ng-model="$ctrl.revenueModelToEdit.revenue_share_percent" required>
+                    <div class="input-group-addon">%</div>
+                </div>
+            </div>
+
+            <div class="form-group" ng-if="$ctrl.revenueModelToEdit.revenue_model_type && $ctrl.revenueModelToEdit.revenue_model_type != 'REVENUE_SHARE'">
+                <label for="revenue-model-minimum">Minimum Payout</label>
+                <div class="input-group">
+                    <div class="input-group-addon">$</div>
+                    <input class="form-control" type="text" id="revenue-model-minimum" ng-model="$ctrl.revenueModelToEdit.minimum_payout">
+                </div>
+            </div>
+
+            <div class="form-group" ng-if="$ctrl.revenueModelToEdit.revenue_model_type && $ctrl.revenueModelToEdit.revenue_model_type != 'REVENUE_SHARE'">
+                <label for="revenue-model-minimum-requests">Minimum Requests</label>
+                <input class="form-control" type="text" id="revenue-model-minimum-requests" ng-model="$ctrl.revenueModelToEdit.minimum_requests">
+            </div>
+        </form>
+
+    </modal-body>
+    <modal-footer>
+        <button type="button" class="btn btn-danger" ng-click="$ctrl.revenueModelToEdit = null">Cancel</button>
+        <button type="button" class="btn btn-primary" ng-click="$ctrl.saveRevenueModel()" ng-disabled="!$ctrl.revenueModelEditorForm.$valid">Save Financial Model</button>
+    </modal-footer>
+</modal-dialog>

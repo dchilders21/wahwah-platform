@@ -1,0 +1,41 @@
+<div class="panel panel-default">
+    <div class="panel-body">
+
+        <div class="row" >
+            <form role="form" class="form-horizontal" name="profileForm">
+                <div class="form-group">
+                    <label for="name" class="col-sm-2 control-label">Name</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" id="name" placeholder="Enter Demand Source Name" ng-model="$ctrl.demandSource.name" ng-disabled="$ctrl.demandSource.is_locked">
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="row" ng-repeat="connection in $ctrl.demandSourceConnections">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Connection :: {{connection.type_name}}</h3>
+                </div>
+                <div class="panel-body">
+                    <form role="form" class="form-horizontal" name="profileForm">
+                        <div class="form-group demand-form">
+                            <label for="connection-type" class="col-sm-2 control-label">Demand Source</label>
+                            <div class="col-sm-4">
+                                <select class="form-control" name="connectionType" ng-model="connection.type_key" ng-options="type.type_key as type.name for type in $ctrl.connectionTypes" id="connection-type"/>
+                            </div>
+                        </div>
+
+                        <div class="form-group demand-form" ng-repeat="(key,value) in $ctrl.connectionTypesByKey[connection.type_key].connection_metadata">
+                            <label for="type-field-{{key}}" class="col-sm-2 control-label">{{value}}</label>
+                            <div class="col-sm-4">
+                                <input placeholder="{{value}}" class="form-control" id="type-field-{{key}}" type="text" ng-model="connection.connection_details[key]" required>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,8 @@
+<a class="popover-link" data-toggle="popover" title="{{$ctrl.title}}" data-container="body" data-placement="bottom" role="button" ng-click="$ctrl.showPopover()"><ng-transclude></ng-transclude></a>
+<div class="popover bottom" role="tooltip" ng-if="$ctrl.isPopoverVisible">
+    <div class="arrow"></div>
+    <h3 class="popover-title">{{$ctrl.title}}</h3>
+    <div class="popover-content">
+        <div class="popover-date-picker"></div>
+    </div>
+</div>

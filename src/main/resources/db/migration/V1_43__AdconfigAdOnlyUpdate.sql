@@ -1,0 +1,1 @@
+ALTER TABLE adconfig_inpage ADD COLUMN leave_behind_url VARCHAR(2083) NULL;

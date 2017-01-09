@@ -1,0 +1,44 @@
+<div class="row">
+    <div class="col-lg-12">
+
+        <ul class="breadcrumb no-margin no-padding text-asbestos">
+            <li><h3 class="page-header-nomargin text-asbestos"><a href="#/admin">Admin Options</a></h3></li>;
+
+            <li><h3 class="page-header-nomargin text-asbestos"><a href="#/product-versions">Product Versions</a></li>
+
+            <li><h3 class="page-header-nomargin text-asbestos">Create Product Version</li>
+        </ul>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Product Version Information</h3>
+            </div>
+            <div class="panel-body">
+                <form role="form" class="form" name="productVersionForm">
+                    <div class="form-group">
+                        <label for="versionName" class="control-label">Version Name</label>
+                        <input type="text" class="form-control" id="versionName" placeholder="Enter Product Version Name" ng-model="productVersion.versionName">
+                    </div>
+                    <div class="form-group">
+                        <label for="gitBranches" class="control-label">Git Branch</label>
+                        <select id="gitBranches" ng-model="productVersion.gitBranchName" ng-disabled="!hasLoadedGitBranches" ng-options="gitBranch for gitBranch in gitBranches" required="true"></select>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <form role="form" class="form">
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" ng-click="addProductVersion()">Add Product Version</button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,144 @@
+<div class="row">
+	<div class="col-lg-8">
+
+		<ul class="breadcrumb page-header text-asbestos no-margin no-padding">
+			<li ng-if="network.id == null"><h3 class="page-header-nomargin text-asbestos">Marketplace</h3></li>
+			<li ng-if="network.id != null"><h3 class="page-header-nomargin text-asbestos"><a href="#/network-{{network.id}}/publishers/">{{network.currentNetwork.name}}</a></h3></li>
+			<li ng-if="!isNewPublisher()"><h3 class="page-header-nomargin text-asbestos" >  <a href="#/publisher-{{currentPublisher.id }}/sites/"> {{currentPublisher.name }} ({{currentPublisher.id }})</a></h3></li>
+			<li ng-if="!isNewPublisher()"><h3 class="page-header-nomargin text-asbestos" >Publisher Settings</h3></li>
+			<li ng-if="isNewPublisher()"><h3 class="page-header-nomargin text-asbestos" >Create New Publisher</h3></li>
+		</ul>
+	</div>
+</div>
+
+<div ng-if="errorMsg != ''" class="row">
+	<div class="alert alert-danger">{{errorMsg}}</div>
+</div>
+
+<br/>
+
+<ng-tabs tabs="$ctrl.tabs" selected-tab="$ctrl.currentTab" tab-label="name" tab-select="$ctrl.setCurrentTab(tab)"></ng-tabs>
+
+<div class="panel panel-default" ng-if="$ctrl.currentTab.id == 'publisher-info'">
+	<div class="panel-body">
+		<form name="$ctrl.publisherForm" role="form" class="form-horizontal">
+
+			<div class="form-group">
+				<label for="publisher-name" class="col-sm-2 control-label">Publisher Name</label>
+				<div class="col-sm-10" ng-class="{'has-error': $ctrl.publisherForm.publisherName.$invalid}">
+					<input type="text" class="form-control" name="publisherName" placeholder="Enter Publisher Name"
+						ng-model="currentPublisher.name" required id="publisher-name" />
+				</div>
+			</div>
+
+			<div class="form-group" ng-if="isNewPublisher()">
+				<label for="site-auto" class="col-sm-2 control-label">Auto-create Site and Floater</label>
+				<div class="col-sm-10" ng-class="{'has-error': $ctrl.publisherForm.siteAuto.$invalid}">
+					<input type="checkbox" name="siteAuto" ng-model="currentPublisher.autoCreateSiteAndToolbar" id="site-auto">
+				</div>
+			</div>
+
+
+			<div class="form-group" ng-if="currentPublisher.autoCreateSiteAndToolbar">
+				<label for="site-url" class="col-sm-2 control-label">Site URL <i ng-if="$ctrl.publisherForm.siteUrl.$invalid" class="fa fa-1x fa-exclamation-triangle red"></i></label>
+				<div class="col-sm-10" ng-class="{'has-error': $ctrl.publisherForm.siteUrl.$invalid}">
+					<input type="text" class="form-control" name="siteUrl" placeholder="Enter Site URL" ng-model="currentPublisherSiteSettings.site_url" id="site-url" required />
+				</div>
+			</div>
+
+
+			<div class="form-group" ng-if="!isNewPublisher()">
+				<label for="contact-name" class="col-sm-2 control-label">Contact Name</label>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" name="contactName" placeholder="Enter Contact Name" ng-model="currentPublisher.contact_name" id="contact-name" />
+				</div>
+			</div>
+
+			<div class="form-group" ng-if="!isNewPublisher()">
+				<label for="contact-email" class="col-sm-2 control-label">Contact Email</label>
+				<div class="col-sm-10" ng-class="{'has-error': $ctrl.publisherForm.contactEmail.$invalid}">
+					<input type="email" class="form-control" name="contactEmail" placeholder="Enter Contact Email" ng-model="currentPublisher.contact_email" /> <span class="help-block" ng-show="$ctrl.publisherForm.contactEmail.$error.email" id="contact-email">Please enter a valid email</span>
+				</div>
+			</div>
+
+
+			<div class="form-group">
+				<label for="country" class="col-sm-2 control-label">Country</label>
+				<div class="col-sm-4" ng-class="{'has-error': $ctrl.publisherForm.country.$invalid}">
+					<select class="form-control" name="country" ng-model="currentPublisher.country"
+							ng-options="country.id as country.name for country in countries" required id="country"/>
+				</div>
+			</div>
+
+			<div class="form-group">
+                <label for="language" class="col-sm-2 control-label">Language</label>
+                <div class="col-sm-4" ng-class="{'has-error': $ctrl.publisherForm.language.$invalid}">
+                    <select class="form-control" name="siteLanguage" ng-model="currentPublisher.language"
+                            ng-options="language.id as language.name for language in languages"  id="language"/>
+                </div>
+            </div>
+
+
+			<div class="form-group" ng-if="!isNewPublisher()">
+				<label for="defaultFormat" class="col-sm-2 control-label">Default Format</label>
+				<div class="col-sm-4" ng-class="{'has-error': $ctrl.publisherForm.defaultFormat.$invalid}">
+					<select class="form-control" name="defaultFormat" ng-model="currentPublisher.default_product_format"
+							ng-options="format.type as format.description for format in allowedFormats"  id="defaultFormat"/>
+				</div>
+			</div>
+
+			<div class="form-group" ng-if="!isNewPublisher()">
+				<label for="display_passback" class="col-sm-2 control-label">Provide Passback HTML</label>
+				<input type="checkbox" id="display_passback" ng-model="$ctrl.isDisplayPassback">
+			</div>
+
+			<div class="form-group" ng-if="!isNewPublisher() && $ctrl.isDisplayPassback">
+				<label for="create-tag-contents-html" class="col-sm-2 control-label">Passback Display HTML</label>
+				<div class="col-sm-10">
+					<textarea class="form-control" id="create-tag-contents-html" placeholder="Enter HTML for passback" ng-model="currentPublisher.passback_display_tag_html"></textarea>
+				</div>
+			</div>
+
+            <div class="form-group" ng-if="!isNewPublisher()">
+                <label for="PublisherNotes" class="col-sm-2 control-label">Publisher Notes</label>
+                <div class="col-sm-10">
+                    <textarea class="form-control" id="PublisherNotes" placeholder="Important notes about site, visible to all users!" ng-model="currentPublisher.account_notes" ></textarea>
+                    <div ng-if="hasRole('INTERNAL_USER')"><i>Warning: Publishers can see this note.</i></div>
+                </div>
+            </div>
+
+
+            <div class="form-group" ng-if="hasRole('INTERNAL_USER') && !isNewPublisher()">
+                <label for="InternalNotes" class="col-sm-2 control-label">Red Panda Internal Notes</label>
+                <div class="col-sm-10">
+                    <textarea class="form-control" id="InternalNotes" placeholder="Internal-only notes here, visible to internal-users only" ng-model="currentPublisher.internal_notes" ></textarea>
+                </div>
+            </div>
+
+    		<div class="form-group">
+				<div class="col-sm-offset-2 col-sm-10">
+					<button type="button" class="btn btn-primary" ng-click="updatePublisher()"
+						ng-disabled="!$ctrl.publisherForm.$valid || disableSubmit" ng-show="!isNewPublisher()">
+						<span ng-show="!disableSubmit">Update Publisher</span>
+						<span ng-hide="!disableSubmit"><i class="fa fa-1x fa-cog fa-spin"></i> Updating Publisher</span>
+					</button>
+					<button type="button" class="btn btn-default" ng-click="createPublisher()" ng-disabled="!$ctrl.publisherForm.$valid || disableSubmit" ng-show="isNewPublisher(currentPublisher.id)">
+						<span ng-show="!disableSubmit">Create New Publisher</span>
+						<span ng-hide="!disableSubmit"><i class="fa fa-1x fa-cog fa-spin"></i> Creating Publisher</span>
+					</button>
+				</div>
+			</div>
+
+
+		</form>
+	</div>
+</div>
+
+
+
+
+<div class="panel panel-default" ng-if="$ctrl.currentTab.id == 'financial-info'">
+    <div class="panel-body">
+		<revenue-model-panel entity-type="publisher" entity-id="currentPublisher.id"></revenue-model-panel>
+    </div>
+</div>

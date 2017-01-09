@@ -1,0 +1,102 @@
+
+server {
+        listen 80;
+        listen [::]:80;
+
+        root /opt/tomcat/webapps/;
+
+        # Make site accessible from http://localhost/
+        server_name staging.dev.wahwahnetworks.com;
+
+        error_page 502 /error/content/error/error_unavailable.html;
+        location /error/ { try_files $uri $uri/; }
+
+        location /platform/assets/ {
+                if ($http_origin ~* (staging\.dev\.wahwahnetworks\.com)) {
+                        set $cors "true";
+                }
+
+
+                # Nginx doesn't support nested If statements. This is where things get slightly nas$
+                # Determine the HTTP request method used
+                if ($request_method = 'OPTIONS') {
+                        set $cors "${cors}options";
+                }
+
+                if ($request_method = 'GET') {
+                        set $cors "${cors}get";
+                }
+
+                if ($request_method = 'POST') {
+                        set $cors "${cors}post";
+                }
+
+                if ($cors = "trueget") {
+                        add_header 'Access-Control-Allow-Origin' "$http_origin";
+                        add_header 'Access-Control-Allow-Credentials' 'true';
+                        add_header 'Access-Control-Allow-Methods' 'GET';
+                        add_header 'Access-Control-Allow-Headers' 'DNT,X-Mx-ReqToken,Keep-Alive,Use$
+                }
+
+                rewrite ^(.*)/content/(.*)$ /ROOT/content/$2 break;
+                rewrite ^(.*)/js/(.*)$ /ROOT/js/$2 break;
+                rewrite ^(.*)/views/(.*)$ /ROOT/views/$2 break;
+                rewrite ^(.*)/components/(.*)$ /ROOT/components/$2 break;
+        }
+
+
+        location /content/ {
+                try_files /ROOT/$uri /ROOT/$uri/;
+        }
+
+        location /js/ {
+                try_files /ROOT/$uri /ROOT/$uri/;
+        }
+
+        location /views/ {
+                try_files /ROOT/$uri /ROOT/$uri/;
+        }
+
+        location /components/ {
+                try_files /ROOT/$uri /ROOT/$uri/;
+        }
+
+        location /wahwahplatform/ {
+                rewrite ^(.*)/wahwahplatform/(.*)$ http://staging.dev.wahwahnetworks.com/$2 permane$
+        }
+
+        location /analytics/ {
+                proxy_pass http://localhost:8080/analytics/;
+                proxy_set_header Host $host;
+                proxy_set_header X-Forwarded-For $remote_addr;
+                port_in_redirect off;
+                proxy_redirect http://localhost:8080/analytics/ /analytics/;
+                proxy_connect_timeout 600;
+        }
+
+        location /stomp/ {
+                proxy_pass http://localhost:8080/stomp/;
+                proxy_http_version 1.1;
+                proxy_set_header Host $host;
+                proxy_set_header X-Forwarded-For $remote_addr;
+                proxy_set_header Upgrade $http_upgrade;
+                proxy_set_header Connection "upgrade";
+                port_in_redirect off;
+                proxy_redirect http://localhost:8080/stomp/ /stomp/;
+                proxy_connect_timeout 600;
+        }
+
+
+        location / {
+                proxy_pass http://localhost:8080/;
+                proxy_set_header Host $host;
+                proxy_set_header X-Forwarded-For $remote_addr;
+                port_in_redirect off;
+                proxy_redirect http://localhost:8080/ /;
+                proxy_connect_timeout 600;
+        }
+
+}
+
+
+

@@ -1,0 +1,3 @@
+<ul class="nav nav-tabs">
+    <li ng-repeat="tab in tabs" heading="tab[tabLabel]" ng-class="{active:selectedTab == tab}"><a ng-click="setActiveTab(tab)">{{tab[tabLabel]}}</a></li>
+</ul>

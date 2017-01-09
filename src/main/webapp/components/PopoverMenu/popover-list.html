@@ -1,0 +1,12 @@
+<a class="popover-link" data-toggle="popover" title="{{$ctrl.title}}" data-container="body" data-placement="bottom" role="button" ng-click="$ctrl.showPopover()"><ng-transclude></ng-transclude></a>
+<div class="popover bottom" role="tooltip" ng-if="$ctrl.isPopoverVisible">
+    <div class="arrow"></div>
+    <h3 class="popover-title">{{$ctrl.title}}</h3>
+    <div class="popover-content">
+        <div ng-transclude="beforeItem" class="popover-prepost-item"></div>
+        <ul class="nav">
+            <li ng-repeat="item in $ctrl.source"><a role="button" ng-click="$ctrl.selectItem(item)">{{$eval($ctrl.listItemName,item)}}</a></li>
+        </ul>
+        <div ng-transclude="afterItem" class="popover-prepost-item"></div>
+    </div>
+</div>

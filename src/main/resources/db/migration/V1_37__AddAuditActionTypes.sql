@@ -1,0 +1,1 @@
+INSERT INTO audit_action_types (name,value) VALUES ('CDN Purge Request','PURGE_REQUEST');

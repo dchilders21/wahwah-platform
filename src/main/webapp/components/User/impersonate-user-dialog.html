@@ -1,0 +1,19 @@
+<modal-dialog modal-id="impersonateDialogModal" visible="$ctrl.visible" on-close="$ctrl.onClose()">
+    <modal-title>Select User To Impersonate</modal-title>
+    <modal-body>
+
+        <p>Click on the user to impersonate. You will be logged in as that user.</p>
+        <p ng-if="$ctrl.impersonationUser"><a ng-click="$ctrl.selectUser($ctrl.realUserObj)">Log out of {{$ctrl.impersonationUser}}</a></p>
+        <p><label for="impersonate-user-search">Search: <input id="impersonate-user-search" ng-model="searchText"></label></p>
+
+        <table class="table table-striped">
+            <thead>
+            <tr><th>Account</th><th>User Type</th><th>Name</th></tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="user in $ctrl.impersonationUsers|orderBy:'accountName'|orderBy:$ctrl.accountNameFunc|filter:searchText" ng-click="$ctrl.selectUser(user)"><td>{{user.accountName}}</td><td>{{$ctrl.userTypes[user.userType]}}</td><td>{{user.firstName}} {{user.lastName}}</td></tr>
+            </tbody>
+        </table>
+
+    </modal-body>
+</modal-dialog>

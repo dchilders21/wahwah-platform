@@ -1,0 +1,40 @@
+package com.wahwahnetworks.platform.data.entities.enums;
+
+/**
+ * Created by Justin on 5/17/2014.
+ */
+
+/* Hierarchy
+
+.DEVELOPER
+..TOOLBAR_PUBLISHER
+..SUPER_USER
+...INTERNAL_USER
+....PLAYER_ADMIN
+....WIDGET_ADMIN
+....ADVERTISING_ADMIN
+....PUBLISHER_ADMIN
+.....PUBLISHER_USER
+....ANALYTICS
+........USER
+
+
+ */
+public enum UserRoleType
+{
+	USER, // Everything is a USER
+	SUPER_USER, // Includes everything but DEVELOPER
+	NETWORK_ADMIN,
+	PUBLISHER_ADMIN, // Also includes PUBLISHER_USER
+	WIDGET_ADMIN,
+	TOOLBAR_PUBLISHER,
+	PLAYER_ADMIN,
+	ADVERTISING_ADMIN,
+	ANALYTICS,
+	DEVELOPER, // Includes SUPER_USER
+	INTERNAL_USER, // Shortcut for PUBLISHER_ADMIN, WIDGET_ADMIN, PLAYER_ADMIN, ANALYTICS, ADVERTISING_ADMIN
+	PUBLISHER_USER, // Shortcut for PUBLISHER_ADMIN,ANALYTICS
+	NETWORK_USER // Shortcut for ANALYTICS
+}
+
+

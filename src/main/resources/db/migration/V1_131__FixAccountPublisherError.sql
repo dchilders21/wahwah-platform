@@ -1,0 +1,2 @@
+INSERT INTO `wahwahplatform`.`account_publishers` (`account_id`, `external_id`, `adserver_type`, `external_id2`, `liverail_sitelist_id`, `marketplace_publisher_account_id`)
+VALUES (1, NULL, 'OPEN_X', NULL, NULL, NULL);

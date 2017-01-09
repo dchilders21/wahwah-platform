@@ -1,0 +1,1 @@
+ALTER TABLE audit_log CHANGE account_name account_name VARCHAR(255) NULL;

@@ -1,0 +1,2 @@
+DELETE FROM publisher_revenue_model WHERE revenue_model_type IS NULL;
+ALTER TABLE publisher_revenue_model MODIFY COLUMN revenue_model_type ENUM('REVENUE_SHARE','GUARANTEED_CPM','GUARANTEED_CPM_WITH_MINIMUM') NOT NULL;

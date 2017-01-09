@@ -1,0 +1,436 @@
+<!-- START tag-settings -->
+<!--
+ Created by Brian.Bober on 8/7/2015.
+-->
+
+<div class="row same-height-row">
+	<div class="col-lg-11 same-height-col">
+
+		<ul class="breadcrumb text-asbestos no-margin no-padding" style="padding: 0 !important; margin: 0 !important">
+			<li ng-if="$ctrl.tagSettings.network != null"><h3 class="page-header-nomargin text-asbestos" ><a href="#/network-{{$ctrl.tagSettings.network.id}}/publishers/">{{$ctrl.tagSettings.network.name}}</a></h3></li>
+			<li ng-if="$ctrl.tagSettings.network == null"><h3 class="page-header-nomargin text-asbestos" ><a href="#/publishers">Red Panda Marketplace</a></h3></li>
+			<li><h3 class="page-header-nomargin text-asbestos"><a href="#/publisher-{{$ctrl.currentSite.account_id}}/sites/">{{ $ctrl.currentSite.account_name }}</a></h3></li>
+			<li><h3 class="page-header-nomargin text-asbestos"> {{ $ctrl.currentSite.site_name }} ( {{ $ctrl.currentSite.id }} )</h3></li>
+			<li ng-if="$ctrl.tagSettings.tags.length > 0"><h3 class="page-header-nomargin text-asbestos"><strong><popover-list-link source="$ctrl.tagSettings.tags" list-item-name="product.product_name" list-item-select="$ctrl.selectTag(item)" title="Tags">{{$ctrl.currentTag.product.product_name}}<after-item ng-click="$ctrl.createAdditionalTag()"><a role="button"><i class="fa fa-plus"></i> Create Additional Tag</a></after-item></popover-list-link></strong></h3></li>
+		</ul>
+	</div>
+	<div class="col-lg-4 same-height-col" style="text-align: right; vertical-align: bottom">
+		<div >
+			<a class="action-icon" href="#/publishers/{{$ctrl.currentSite.account_id}}" ng-if="$ctrl.currentSite.account_id != null && hasRole('PUBLISHER_ADMIN')"><i class="fa fa-2x fa-edit"></i></a>
+			<!--
+                            <a class="action-icon" ng-click=""><i class="fa fa-2x fa-times"></i></a>
+                            -->
+			<a ng-href="{{$ctrl.getUrl('/api/1.0/sites/tags/txt/product-' + $ctrl.currentTag.product.id + '?xsrf_token=' + $ctrl.xsrfToken)}}" target="_blank" ng-tooltip data-placement="left" data-original-title="Download Tags" download><i class="fa fa-2x fa-download"></i></a>
+			<a href="{{universalSiteTagDownloadUrl}}" target="_blank" download title="Download universal site tag"><i class="fa fa-2x fa-cloud-download"></i></a>
+		</div>
+	</div>
+</div>
+<br/>
+
+<div class="row">
+	<div class="col-lg-12">
+		<div class="alert alert-success" ng-if="$ctrl.showSaveSuccess"><strong>Settings Saved</strong> The site and tag has been saved with the updated information.</div>
+		<div class="alert alert-danger" ng-if="$ctrl.showSaveError"><strong>Error</strong> {{$ctrl.errorMsg}}</div>
+		<div class="alert alert-danger" ng-if="$ctrl.showLockError"><strong>Error</strong> Please make sure to add a reason for locking the configurations in the 'Site Notes' under the 'Sites Tab'.</div>
+		<div class="alert alert-danger" ng-if="$ctrl.currentTag.wasToolbar"><strong>Warning</strong> This tag is currently configured as unsupported product type 'Toolbar'. Saving this site will result in the tag being converted to the supported product type 'Standalone Ad'.</div>	</div>
+	</div>
+</div>
+
+<div ng-if="$ctrl.currentTag.product.is_locked" class="alert alert-info"><i class="fa fa-2x fa-lock"></i> This tag is locked to prevent changes. Only site and domain settings can be changed.<br></div>
+<div ng-if="$ctrl.user.accountType == 'ROOT' && $ctrl.currentSite.redpanda_linked_site_id != null">Some fields are read-only and can be edited in <a href="#/tagsettings/{{$ctrl.currentSite.redpanda_linked_site_id}}?tab={{selectedTabId}}">Red Panda Site # {{$ctrl.currentSite.redpanda_linked_site_id}}</a></div>
+<div ng-if="$ctrl.user.accountType == 'ROOT' && $ctrl.currentSite.marketplace_linked_site_id != null">Linked <a href="#/tagsettings/{{$ctrl.currentSite.marketplace_linked_site_id}}?tab={{selectedTabId}}">Marketplace Site # {{$ctrl.currentSite.marketplace_linked_site_id}}</a></div>
+
+
+
+<ng-tabs tabs="$ctrl.tabs" selected-tab="$ctrl.currentTab" tab-label="name" tab-select="$ctrl.setCurrentTab(tab)"></ng-tabs>
+
+<div class="tab-content">
+	<div id="siteinfo" class="tab-pane fade" ng-class="{active: $ctrl.currentTab.id == 'site-info',in: $ctrl.currentTab.id == 'site-info'}">
+
+
+<!-- *************************************************** SITE INFO ***************************************************  -->
+
+
+
+
+		<div class="panel panel-default">
+				<div class="panel-body">
+					<form name="siteForm" role="form" class="form-horizontal">
+
+						<div class="form-group">
+							<label for="site-name" class="col-sm-2 control-label">Site Name</label>
+							<div class="col-sm-10" ng-class="{'has-error': siteForm.siteName.$invalid}">
+								<input type="text" class="form-control" name="siteName" placeholder="Enter Site Name"
+									   ng-model="$ctrl.currentSite.site_name" required id="site-name" ng-if="$ctrl.currentSite.redpanda_linked_site_id == null"/>
+								<span ng-if="$ctrl.currentSite.redpanda_linked_site_id != null">{{$ctrl.currentSite.site_name}}</span>
+							</div>
+						</div>
+<!--
+						<div class="form-group has-feedback" ng-if="$ctrl.hasRole('SUPER_USER')" ng-class="{'has-error': publisherNameInvalid}">
+							<label for="accountName" class="col-sm-2 control-label">Publisher</label>
+							<div class="col-sm-10" ng-class="{'has-error': siteForm.accountName.$invalid}">
+								<input type="text" class="form-control" id="accountName" disabled placeholder="Enter Publisher Name" ng-model="$ctrl.currentSite.account_name" ng-typeahead url="{{infoTab.publisherQuery}}" filter="infoTab.onPublisherFilter(parsedResponse)">
+							</div>
+						</div>
+						-->
+						<div class="form-group has-feedback" ng-if="$ctrl.hasRole('SUPER_USER')" ng-class="{'has-error': publisherNameInvalid}">
+							<label for="accountName" class="col-sm-2 control-label">Publisher</label>
+							<div class="col-sm-10" ng-class="{'has-error': siteForm.accountName.$invalid}">
+								<span id="accountName">{{ $ctrl.currentSite.account_name }}</span>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="site-url" class="col-sm-2 control-label">Site URL</label>
+							<div class="col-sm-10" ng-class="{'has-error': siteForm.siteUrl.$invalid}">
+								<input type="text" class="form-control" name="siteUrl" placeholder="Enter Site URL" ng-model="$ctrl.currentSite.site_url" ng-if="$ctrl.currentSite.redpanda_linked_site_id == null"
+									   required id="site-url" />
+								<span ng-if="$ctrl.currentSite.redpanda_linked_site_id != null">{{$ctrl.currentSite.site_url}}</span>
+							</div>
+						</div>
+
+
+						<div class="form-group">
+							<div class="col-sm-offset-2 col-sm-10">
+								<div class="checkbox">
+									<label>
+										<input type="checkbox" id="inherit_publisher" ng-model="$ctrl.currentSite.inherit_pub_details"/>Inherit Publisher Details
+									</label>
+								</div>
+							</div>
+						</div>
+
+						<div ng-if="!$ctrl.currentSite.inherit_pub_details">
+							<div class="form-group">
+								<label for="contact-name" class="col-sm-2 control-label">Contact Name</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" name="contactName" placeholder="Enter Contact Name"
+										   ng-model="$ctrl.currentSite.contact_name" id="contact-name" />
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label for="contact-email" class="col-sm-2 control-label">Contact Email</label>
+								<div class="col-sm-10" ng-class="{'has-error': siteForm.contactEmail.$invalid}">
+									<input type="email" class="form-control" name="contactEmail" placeholder="Enter Contact Email"
+										   ng-model="$ctrl.currentSite.contact_email" /> <span class="help-block" ng-show="siteForm.contactEmail.$error.email" id="contact-email">Please
+								enter a valid email</span>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label for="site-language" class="col-sm-2 control-label">Language</label>
+								<div class="col-sm-4" ng-class="{'has-error': siteForm.siteLanguage.$invalid}">
+									<select class="form-control" name="siteLanguage" ng-model="$ctrl.currentSite.site_language" ng-options="language.id as language.name for language in $ctrl.siteLanguages" required id="site-language"/>
+								</div>
+							</div>
+
+
+							<div class="form-group">
+								<label for="site-country" class="col-sm-2 control-label">Country</label>
+								<div class="col-sm-4" ng-class="{'has-error': siteForm.siteCountry.$invalid}">
+									<select class="form-control" name="siteCountry" ng-model="$ctrl.currentSite.site_country" ng-options="country.id as country.name for country in $ctrl.siteCountries" required id="site-country"/>
+								</div>
+							</div>
+
+
+						</div>
+
+
+						<div class="form-group">
+							<label for="site-type" class="col-sm-2 control-label">Site Type</label>
+							<div class="col-sm-4" ng-class="{'has-error': siteForm.siteType.$invalid}">
+								<select class="form-control" name="siteType" ng-model="$ctrl.currentSite.site_type" ng-options="type.id as type.name for type in $ctrl.siteTypes" required id="site-type"/>
+							</div>
+						</div>
+
+
+						<div class="form-group">
+							<label for="traffic-estimate" class="col-sm-2 control-label">Traffic Estimate</label>
+							<div class="col-sm-4" ng-class="{'has-error': siteForm.trafficEstimate.$invalid}">
+								<select class="form-control" name="trafficEstimate" ng-model="$ctrl.currentSite.traffic_estimate" ng-options="estimate.id as estimate.name for estimate in $ctrl.trafficEstimates" required id="traffic-estimate"/>
+							</div>
+						</div>
+
+						<div class="form-group" >
+							<label for="defaultFormat" class="col-sm-2 control-label">Default Format</label>
+							<div class="col-sm-4" ng-class="{'has-error': siteForm.defaultFormat.$invalid}">
+								<select class="form-control" name="defaultFormat" ng-model="$ctrl.currentSite.default_product_format"
+										ng-options="format.type as format.description for format in $ctrl.allowedFormats"  id="defaultFormat"/>
+							</div>
+						</div>
+
+
+
+						<div class="form-group">
+							<label for="display_passback" class="col-sm-2 control-label">Provide Passback HTML</label>
+							<input type="checkbox" id="display_passback" ng-model="$ctrl.currentSite.isDisplayPassback">
+						</div>
+
+						<div class="form-group" ng-if="$ctrl.currentSite.isDisplayPassback">
+							<label for="create-tag-contents-html" class="col-sm-2 control-label">Passback Display HTML</label>
+							<div class="col-sm-10">
+								<textarea class="form-control" id="create-tag-contents-html" placeholder="Enter HTML for passback" ng-model="$ctrl.currentSite.passback_display_tag_html"></textarea>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="SiteNotes" class="col-sm-2 control-label">Site Notes</label>
+							<div class="col-sm-10">
+								<textarea class="form-control" id="SiteNotes" placeholder="Important notes about site, visible to publisher users" ng-model="$ctrl.currentSite.site_notes" ></textarea>
+							</div>
+						</div>
+
+						<div class="form-group" ng-if="$ctrl.hasRole('INTERNAL_USER')">
+							<label for="InternalNotes" class="col-sm-2 control-label">Red Panda Internal Notes</label>
+							<div class="col-sm-10">
+								<textarea class="form-control" id="InternalNotes" placeholder="Internal-only notes here, visible to internal users only" ng-model="$ctrl.currentSite.internal_notes" ></textarea>
+							</div>
+						</div>
+
+					</form>
+
+				</div>
+		</div>
+	</div>
+
+
+
+
+<!-- ***************************************************  TAG SETTINGS  *************************************************** -->
+
+
+
+
+
+	<div id="tagsettings" class="tab-pane fade" ng-class="{active: $ctrl.currentTab.id == 'tag-settings',in: $ctrl.currentTab.id == 'tag-settings'}">
+
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<div class="row" ng-if="$ctrl.tagSettings.tags.length > 1">
+						<span style="display: inline-block; min-width: 8em">Tag Name:</span>
+					<input type="text" class="form-control" style="width: 30em; display: inline-block;"
+						   name="tagName" placeholder="Enter Tag Name (only for multiple-tag sites)" ng-model="$ctrl.currentTag.product.product_name"
+						   required="" id="tag-name">
+
+					<br/>
+					<br/>
+				</div>
+				<div class="row" ng-if="$ctrl.currentTag.product.type == 'STANDALONE_AD'">
+					<div class="dropdown" ng-if="$ctrl.hasRole('NETWORK_ADMIN')">
+						<span style="display: inline-block; min-width: 8em">Tag Format:</span>
+						<button  class="btn btn-primary dropdown-toggle" data-toggle="dropdown" ng-disabled="$ctrl.currentTag.product.is_locked" style="width: 30em" >
+							{{ $ctrl.adFormatNames[$ctrl.currentTag.product.standalone_ad.ad_format] }} <span class="caret"></span>
+
+						</button>
+						<ul  class="dropdown-menu" style="width: 30em">
+							<li ng-repeat="type in $ctrl.adFormats"><a ng-click="$ctrl.setTagFormat(type)">{{type}}</a></li>
+						</ul>
+
+					</div>
+				</div>
+
+				<br/>
+
+				<!-- Ad Only - only -->
+				<div ng-if="$ctrl.currentTag.product.type == 'STANDALONE_AD'">
+
+
+					<div ng-if="$ctrl.currentTag.product.standalone_ad.ad_format == 'floater'">
+
+						<div class="row">
+							<i>Alignment</i><br>
+						</div>
+
+						<div class="row">
+
+							<div class="dropdown" >
+								<span style="display: inline-block; min-width: 8em">Horizontal:</span>
+								<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" style="width: 30em" ng-disabled="$ctrl.currentTag.product.is_locked">{{ $ctrl.currentTag.product.standalone_ad.align_horiz }}<span class="caret"></span>
+
+								</button>
+								<ul class="dropdown-menu" style="width: 30em" >
+									<li ng-repeat="alignment in $ctrl.adHorizontalAlignments"><a ng-click="$ctrl.currentTag.product.standalone_ad.align_horiz = $ctrl.currentTag.product.standalone_ad.expansion_align_horiz = alignment" >{{alignment}}</a></li>
+                                </ul>
+                            </div>
+
+						</div>
+
+						<br/>
+
+						<div class="row">
+							<div class="dropdown">
+								<span style="display: inline-block; min-width: 8em">Vertical:</span>
+								<button  class="btn btn-primary dropdown-toggle" data-toggle="dropdown" style="width: 30em"  ng-disabled="$ctrl.currentTag.product.is_locked">{{ $ctrl.currentTag.product.standalone_ad.align_vert }}<span class="caret"></span>
+
+								</button>
+								<ul class="dropdown-menu" style="width: 30em">
+									<li ng-repeat="alignment in $ctrl.adVerticalAlignments"><a ng-click="$ctrl.currentTag.product.standalone_ad.align_vert = $ctrl.currentTag.product.standalone_ad.expansion_align_vert = alignment">{{alignment}}</a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					<br/>
+
+					<div ng-if="$ctrl.currentTag.product.standalone_ad.ad_format == 'banner'">
+
+						<div class="row">
+							<i>Alignment <span ng-if="tagSettingsTab.typeSpecificValues.ad_format == 'floater'">Note: Changing the above values will automatically modify these.</span></i><br>
+						</div>
+
+						<div class="row" style="width: 70%">
+
+							<div class="dropdown">
+								<span style="display: inline-block; min-width: 8em">Horizontal:</span>
+								<button  class="btn btn-primary dropdown-toggle" data-toggle="dropdown" style="width: 30em" ng-disabled="$ctrl.currentTag.product.is_locked">{{$ctrl.currentTag.product.standalone_ad.expansion_align_horiz }}<span class="caret"></span>
+
+								</button>
+								<ul class="dropdown-menu" style="width: 30em">
+									<li ng-repeat="align in $ctrl.adHorizontalAlignments"><a ng-click="$ctrl.currentTag.product.standalone_ad.expansion_align_horiz = align; setHorizontalDemo(align)">{{align}}</a></li>
+								</ul>
+							</div>
+						</div>
+
+						<br/>
+
+						<div class="row" style="width: 70%">
+							<div class="dropdown">
+								<span style="display: inline-block; min-width: 8em">Vertical:</span>
+								<button  class="btn btn-primary dropdown-toggle" data-toggle="dropdown" style="width: 30em" ng-disabled="$ctrl.currentTag.product.is_locked">{{$ctrl.currentTag.product.standalone_ad.expansion_align_vert }}<span class="caret"></span>
+
+								</button>
+								<ul class="dropdown-menu" style="width: 30em">
+									<li ng-repeat="align in $ctrl.adVerticalAlignments"><a ng-click="$ctrl.currentTag.product.standalone_ad.expansion_align_vert = align; setVerticalDemo(align)">{{align}}</a></li>
+								</ul>
+							</div>
+						</div>
+
+						<div id="placement_demo">
+							<div id="ad_demo" ng-class="{ anchorLeft: (horizAlignment == 'left'), anchorRight: (horizAlignment == 'right'), anchorCenter: (horizAlignment == 'center'), anchorTop: (vertAlignment == 'top'), anchorBottom: (vertAlignment == 'bottom'), anchorMiddle: (vertAlignment == 'middle')}"></div>
+						</div>
+
+						<br />
+
+						<!-- <div class="row">
+							<span style="display: inline-block; min-width: 8em">Breakout of Ad:</span>
+							<input type="checkbox" id="breakout_ad" ng-model="$ctrl.currentTag.product.standalone_ad.inad_breakout"/>
+						</div> -->
+					</div>
+
+					<div ng-if="$ctrl.currentTag.product.standalone_ad.ad_format == 'ostream'">
+
+						<div class="row">
+							<span style="display: inline-block; min-width: 8em">Autoload:</span>
+							<input type="checkbox" id="auto_load" ng-model="$ctrl.currentTag.product.standalone_ad.outstream_autoload" ng-disabled="$ctrl.currentTag.product.is_locked"/>
+						</div>
+						<br />
+						<!-- <div class="row">
+							<span style="display: inline-block; min-width: 8em">Floater on Scroll:</span>
+							<input type="checkbox" id="outstream_float" ng-model="$ctrl.currentTag.product.standalone_ad.outstream_float"/>
+						</div> -->
+						<br />
+						<div class="row">
+							<span style="display: inline-block; min-width: 8em">Div Id:</span>
+								<input type="text" class="form-control trigger" name="trigger" placeholder="ex: redpandaAd"
+									   ng-model="$ctrl.currentTag.product.standalone_ad.outstream_triggerId" id="trigger" ng-disabled="$ctrl.currentTag.product.is_locked"/>
+						</div>
+					</div>
+				</div>
+
+				<br />
+
+				<!-- Custom - only -->
+				<div ng-if="$ctrl.currentTag.product.type == 'CUSTOM'">
+					<p>CUSTOM was chosen which is for manual unit creation, including media portals. Therefore, limited options are available.<br>
+					CUSTOM cannot be changed to another type.</p>
+				</div>
+
+			</div>
+
+		</div>
+
+
+	</div>
+
+    <!-- ***************************************************  END OF TAG SETTINGS  *************************************************** -->
+
+
+	<br/>
+
+
+	<!-- ***************************************************  DOMAINS TAB *************************************************** -->
+
+	<div id="domains" class="tab-pane fade" ng-if="$ctrl.hasRole('NETWORK_ADMIN')" ng-class="{active: $ctrl.currentTab.id == 'domains',in: $ctrl.currentTab.id == 'domains'}">
+		<tag-settings-domain-panel ng-if="$ctrl.tagSettings.suggested_domains != null && $ctrl.tagSettings.domains != null" site="$ctrl.currentSite" domains="$ctrl.tagSettings.domains" suggested-domains="$ctrl.tagSettings.suggested_domains"></tag-settings-domain-panel>
+		<div ng-if="$ctrl.tagSettings.suggested_domains == null || $ctrl.tagSettings.domains == null">Analytics server inaccessible. Please contact system administrator</div>
+	</div>
+
+    <!-- ***************************************************  END DOMAINS ***************************************************  -->
+
+    <br />
+
+	<!-- ***************************************************  FINANCIAL MODEL TAB *************************************************  -->
+
+	<div id="financial_model" class="tab-pane fade" ng-if="$ctrl.hasRole('NETWORK_ADMIN')" ng-class="{active: $ctrl.currentTab.id == 'financial-model',in: $ctrl.currentTab.id == 'financial-model'}">
+        <revenue-model-panel entity-type="site" entity-id="siteId"></revenue-model-panel>
+	</div>
+
+	<!-- *************************************************** END FINANCIAL MODEL **************************************************** -->
+
+	<!-- ***************************************************  FEATURES TAB *************************************************  -->
+
+	<div id="features" class="tab-pane fade" ng-if="$ctrl.hasRole('NETWORK_ADMIN')" ng-class="{active: $ctrl.currentTab.id == 'features',in: $ctrl.currentTab.id == 'features'}">
+		<tag-settings-feature-panel tag="$ctrl.currentTag" available-features="$ctrl.tagSettings.available_features"/>
+	</div>
+
+	<!-- *************************************************** END FEATURES **************************************************** -->
+
+    <!-- ***************************************************  ADVANCED TAB *************************************************** -->
+
+
+    <div id="advanced" class="tab-pane fade" ng-if="$ctrl.hasRole('NETWORK_ADMIN')" ng-class="{active: $ctrl.currentTab.id == 'advanced',in: $ctrl.currentTab.id == 'advanced'}">
+		<tag-settings-advanced-panel site="$ctrl.currentSite" tag="$ctrl.currentTag"></tag-settings-advanced-panel>
+    </div>
+
+
+    <br>
+
+    <!-- ***************************************************  END ADVANCED ***************************************************  -->
+
+	<div class="row">
+		<div class="pull-left">
+			<button type="button" class="btn btn-default" ng-click="$ctrl.cancel()">Cancel</button>
+		</div>
+		<div class="pull-right">
+			<button type="button" class="btn btn-primary" ng-click="$ctrl.save()" ng-disabled="$ctrl.disableSubmit"><i ng-if="$ctrl.disableSubmit" class="fa fa-1x fa-cog fa-spin"></i> Save Settings</button>
+		</div>
+	</div>
+</div>
+<!-- END tag-settings -->
+
+<!-- Create Product Dialog -->
+
+<modal-dialog visible="$ctrl.newProduct != null" on-close="$ctrl.newProduct = null">
+	<modal-title>Create Additional Tag</modal-title>
+	<modal-body>
+
+        <form role="form">
+            <div class="form-group">
+                <label for="new-product-name">Name</label>
+                <input type="text" class="form-control" id="new-product-name" placeholder="New tag name..." ng-model="$ctrl.newProduct.name">
+            </div>
+
+            <div class="form-group">
+                <label for="new-product-format">Format</label>
+                <select id="new-product-format" class="form-control" ng-options="key as value for (key,value) in $ctrl.productTypes" ng-model="$ctrl.newProduct.format"></select>
+            </div>
+        </form>
+
+	</modal-body>
+	<modal-footer>
+		<button type="button" class="btn btn-danger" ng-click="$ctrl.newProduct = null">Cancel</button>
+		<button type="button" class="btn btn-primary" ng-click="$ctrl.saveAdditionalTag()">Apply</button>
+	</modal-footer>
+</modal-dialog>
+

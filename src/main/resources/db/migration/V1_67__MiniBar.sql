@@ -1,0 +1,1 @@
+ALTER TABLE wahwahplatform.products CHANGE type type ENUM('TOOLBAR', 'STANDALONE_AD', 'MINI_BAR', 'CUSTOM');

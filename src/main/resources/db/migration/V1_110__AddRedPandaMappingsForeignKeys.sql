@@ -1,0 +1,2 @@
+ALTER TABLE sites ADD FOREIGN KEY fk_sites_marketplace_link_id(marketplace_site_id) REFERENCES sites(id);
+ALTER TABLE account_publishers ADD FOREIGN KEY fk_account_publishers_marketplace_account_id(marketplace_publisher_account_id) REFERENCES account_publishers(account_id);

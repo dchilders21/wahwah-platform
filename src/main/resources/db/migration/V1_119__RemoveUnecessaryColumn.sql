@@ -1,0 +1,1 @@
+ALTER TABLE account_publishers DROP COLUMN ox_marketplace_order_id;

@@ -1,0 +1,12 @@
+CREATE TABLE ad_units (
+  id INT NOT NULL AUTO_INCREMENT,
+  ad_server ENUM('OPEN_X') NOT NULL,
+  external_id VARCHAR(255) NOT NULL,
+  width INT NOT NULL,
+  height INT NOT NULL,
+  unit_type ENUM('DISPLAY','MOBILE','VIDEO') NOT NULL,
+  product_id INT NOT NULL,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
+ALTER TABLE ad_units ADD FOREIGN KEY fk_adunit_product(product_id) REFERENCES products(id) ON DELETE CASCADE ON UPDATE CASCADE;

@@ -1,0 +1,47 @@
+<div class="row">
+    <div class="col-lg-12">
+
+        <ul class="breadcrumb no-margin no-header text-asbestos">
+
+            <li><h3 class="page-header-nomargin text-asbestos">Ad Ops</h3></li>
+            <li><h3 class="page-header-nomargin text-asbestos">Unmapped Creatives</h3></li>
+        </ul>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+            <div class="panel panel-default" ng-if="lineItems.length > 0">
+
+                <div class="panel-heading">Unmapped Creatives</div>
+
+                <table class="table table-bordered">
+                    <thead>
+                    <tr><th>Demand Partner</th><th>Creative Name</th><th>Linked Ads</th><th>Available Options</th></tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="row in lineItems">
+                        <td><a ng-href="/wahwahanalytics/ox/demand-partner/{{row.demand_partner_id}}" target="_blank">{{row.demand_partner_name}}</a></td>
+                        <td ng-if="row.creative_type == 'HTML'"><a ng-href="/analytics/ox/creative/{{row.external_id}}" target="_blank">{{row.creative_name}}</a></td>
+                        <td ng-if="row.creative_type == 'LINEAR_VAST'">{{row.creative_name}}</td>
+                        <td ng-if="row.creative_type == 'LIVERAIL_AD'">{{row.creative_name}}</td>
+                        <td>
+                            <ul>
+                                <li ng-repeat="linked_ad in row.linked_ads">
+                                    <span ng-if="linked_ad.ad_server_type == 'OPEN_X'"><a ng-href="/analytics/ox/ad/{{linked_ad.external_id}}">{{linked_ad.name}} (OpenX Ad ID: {{linked_ad.external_id}})</a></span>
+                                    <span ng-if="linked_ad.ad_server_type == 'LIVE_RAIL'">{{linked_ad.name}} (LiveRail Ad Source ID: {{linked_ad.external_id}})</span>
+                                </li>
+                            </ul>
+                        </td>
+                        <td><select ng-options="item.demand_partner_line_item_id as item.external_id for item in options['demand-partner-' + row.demand_partner_id]" ng-model="row.demand_partner_line_item_id"></select></td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div class="panel-footer" style="text-align: right">
+                        <button class="btn btn-primary" ng-click="save()">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

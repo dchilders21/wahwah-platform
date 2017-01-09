@@ -1,0 +1,1 @@
+ALTER TABLE line_items ADD COLUMN supports_mobile BIT(1) DEFAULT TRUE;

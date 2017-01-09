@@ -1,0 +1,13 @@
+<!-- START RED PANDA CONTENT -->
+<!-- Instructions: Place the following in the $tag.instructionsPagePosition -->
+<!-- RP #if ($tag.networkName != "") [Network: $tag.networkName] #end #if ($tag.publisherName != "") [Publisher: $tag.publisherName] #end #if ($tag.siteName != "") [Site: $tag.siteName] #end  -->
+<script type="text/javascript">
+
+var RP_DEFAULT_TAG_TYPE = "$tag.defaultTagFormat";
+
+var RP_TAG_ID = 'rp-tie-script-$tag.objectId';
+document.writeln('<scr'+'ipt type="text/javascr'+'ipt" src="'+
+        (new String("$tag.objectPath")).replace('${DOMAIN}',encodeURIComponent(((document.referrer || window.location.href).split("//")[1]).split('/')[0]) /* domain */)+'/" id="' + RP_TAG_ID + '"></scr'+'ipt>');
+
+</script>
+<!-- END RED PANDA CONTENT -->

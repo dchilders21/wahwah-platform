@@ -1,0 +1,1 @@
+Stick these in the parent directory of wahwah-analytics. Run every morning or when analytics is breaking the platform (probably from an update)

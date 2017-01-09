@@ -1,0 +1,1 @@
+ALTER TABLE adconfig_inpage ADD COLUMN audio_volume SMALLINT DEFAULT 0;

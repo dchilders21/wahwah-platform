@@ -1,0 +1,152 @@
+<div class="panel panel-default">
+    <div class="panel-body">
+
+        <div class="row" ng-if="$ctrl.hasRole('NETWORK_ADMIN')">
+            <span style="display: inline-block; min-width: 15em">Widget Id:</span>
+            <span ng-if="$ctrl.tag.product.widget_id">{{$ctrl.tag.product.widget_id}}</span>
+            <span ng-if="!$ctrl.tag.product.widget_id">Not Yet Published</span>
+        </div>
+
+        <div ng-if="$ctrl.hasRole('NETWORK_ADMIN')">
+
+            <div class="row" ng-if="$ctrl.tag.product.type != 'AD_SERVER_NATIVE'">
+                <div class="dropdown" ng-if="$ctrl.site.redpanda_linked_site_id == null && $ctrl.hasRole('INTERNAL_USER')">
+                    <span style="display: inline-block; min-width: 15em">Product Version:</span>
+                    <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" style="width: 30em" >{{$ctrl.tag.product.product_version_id.versionName }}<span class="caret"></span>
+
+                    </button>
+                    <ul  class="dropdown-menu" style="width: 30em">
+                        <li ng-repeat="productVersion in $ctrl.productVersions"><a ng-click="$ctrl.tag.product.product_version_id = productVersion">{{productVersion.versionName}}</a></li>
+                    </ul>
+                </div>
+                <div ng-if="$ctrl.site.redpanda_linked_site_id != null || !$ctrl.hasRole('INTERNAL_USER')">
+                    <span style="display: inline-block; min-width: 15em">Product Version:</span><span style="width: 30em"> {{$ctrl.tag.product.product_version_id.versionName}}</span>
+                </div>
+            </div>
+
+            <div class="row" ng-if="$ctrl.hasRole('INTERNAL_USER') && $ctrl.tag.product.type != 'AD_SERVER_NATIVE'">
+                <div class="dropdown">
+                    <span style="display: inline-block; min-width: 15em">Log Level:</span>
+                    <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" style="width: 30em" ng-disabled="$ctrl.tag.product.is_locked">{{$ctrl.tag.product.log_level }}<span class="caret"></span>
+
+                    </button>
+                    <ul class="dropdown-menu" style="width: 30em">
+                        <li ng-repeat="logLevel in $ctrl.logLevels"><a ng-click="$ctrl.tag.product.log_level = logLevel">{{logLevel}}</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="row" ng-if="$ctrl.hasRole('INTERNAL_USER') && $ctrl.tag.product.type != 'AD_SERVER_NATIVE'">
+                <div class="row">
+                    <span style="display: inline-block; min-width: 15em">Debug web code:</span>
+                    <span  ng-if="$ctrl.tag.product.type == 'CUSTOM'"> {{$ctrl.tag.product.debug_mode}}</span>
+							<span  ng-if="$ctrl.tag.product.type != 'CUSTOM'">
+								<input type="checkbox" id="debug_mode" ng-model="$ctrl.tag.product.debug_mode"  ng-disabled="$ctrl.tag.product.is_locked"/>
+								<span ng-if="$ctrl.tag.product.debug_mode"><i>Warning: performance will be reduced.</i></span>
+                            </span>
+                    </span>
+                </div>
+            </div>
+
+
+            <div class="row" ng-if="$ctrl.tag.product.type == 'STANDALONE_AD'">
+                <span style="display: inline-block; min-width: 15em">Breakout of Ad (Banner Only):</span>
+                <input type="checkbox" id="breakout_ad" ng-model="$ctrl.tag.product.standalone_ad.inad_breakout"   ng-disabled="$ctrl.tag.product.is_locked"/>
+            </div>
+
+            <br />
+
+        <div class="row" ng-if="$ctrl.hasRole('SUPER_USER') && $ctrl.tag.product.type != 'CUSTOM' && ctrl.tag.product.type != 'AD_SERVER_NATIVE'">
+            <span style="display: inline-block; min-width: 15em">Video ad volume (%):</span>
+
+
+            <input type="number" min="0" max="100" step="1" ng-model="$ctrl.tag.product.adconfig_inpage.audio_volume"   ng-disabled="$ctrl.tag.product.is_locked"/>
+
+            <br>
+            <div ng-if="$ctrl.tag.product.adconfig_inpage.audio_volume > 0"><i style="color: red">Warning: Audio should be 0 unless publisher-requested. It can cause undesirable results for users.</i></div>
+        </div>
+
+
+        <div class="row" ng-if="$ctrl.hasRole('NETWORK_ADMIN')">
+            <form role="form" class="form-horizontal">
+                <revenue-model-editor billable-object="$ctrl.tag.product.billable"></revenue-model-editor>
+            </form>
+        </div>
+
+
+        <br />
+
+        <div class="row" style="height: 15em; overflow-y: scroll;">
+            <table class="table table-striped table-grid">
+                <thead>
+                <tr>
+                    <th>Line Item</th>
+                    <th>Demand Source</th>
+                    <th>Delivery Mode</th>
+                    <th>cpm</th>
+                    <th>Status</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="li in $ctrl.tag.line_items_targeted">
+                    <td>
+                        <p type="text"><a href="#/demand-sources/{{li.demand_source_id}}?tab=demand-source-line-item&line_item_id={{li.id}}&line_item_tab=line-item-info" target="_blank">{{li.name}}</a> </p>
+                    </td>
+                    <td>
+                        <p type="text"><a href="#/demand-sources/{{li.demand_source_id}}"  target="_blank">{{li.demand_source_name}}</a></p>
+                    </td>
+                    <td>
+                        <p type="text">{{li.delivery_mode}}</p>
+                    </td>
+                    <td>
+                        <p type="text">{{li.cpm}}</p>
+                    </td>
+                    <td>
+                        <p type="text">{{(li.is_paused)?"Paused":"Active"}}</p>
+                    </td>
+                </tr>
+                </tbody>
+            </table>        </div>
+        <br/>
+            <div class="row" ng-if="$ctrl.hasRole('NETWORK_ADMIN')">
+                <span style="display: inline-block; min-width: 8em">Lock Configurations:</span>
+                <!-- <div class="switch"> -->
+                <input id="cmn-toggle-1" class="cmn-toggle cmn-toggle-round" data-target="#myModal" type="checkbox" onclick="if (document.getElementById('cmn-toggle-1').checked) {$('#myModal').modal();}" ng-model="$ctrl.tag.product.is_locked" ng-click="$ctrl.tag.product.is_locked">
+                <label for="cmn-toggle-1"></label>
+                <!-- </div> -->
+
+                <!-- Modal -->
+                <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                <h4 class="modal-title" id="myModalLabel">Configurations Lock</h4>
+                            </div>
+                            <div class="modal-body">
+                                Please make sure to add a reason for locking the configurations in the 'Site Notes' under
+                                the 'Sites Tab'.  Once you click 'Save Settings' only you will be able to change these configuration settings.
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+                            </div>
+                        </div>
+                        <!-- /.modal-content -->
+                    </div>
+                    <!-- /.modal-dialog -->
+                </div>
+                <!-- Modal -->
+            </div>
+
+            <br />
+
+            <div class="row" ng-if="$ctrl.tag.product.widget_id">
+                <span style="display: inline-block; min-width: 15em">Demo Page:</span>
+                    <span>
+                        <a target="_blank" href="/content/demopage/demo.html?widgetID={{$ctrl.tag.product.widget_id}}&env={{$ctrl.environment.environmentAlias}}&adFormat={{$ctrl.tag.product.standalone_ad.ad_format}}">View Demo Page</a>
+                    </span>
+            </div>
+        </div>
+    </div>
+</div>

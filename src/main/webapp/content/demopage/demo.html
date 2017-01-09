@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Red Panda Demo Page</title>
+
+
+
+			<script>
+            // THIS WILL ONLY PASS IN THE WIDGET ID
+            //// USED TO TEST THE wahwahobject.js OBJECT IN THE PUBLISHER'S FOLDER
+            var widgetID = getUrlVars()["widgetID"];
+			var env = getUrlVars()["env"];
+			var adFormat = getUrlVars()["adFormat"];
+
+            function getUrlVars() {
+                var vars = {};
+                var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+                vars[key] = value;
+                });
+                return vars;
+            }
+
+            var demoURL = "http://cdn-s.wwnstatic.com/00BA6A/product/publishers/_release/" + env + "/" + widgetID + "/wahwahobject.js";
+
+			window.onload = function() {
+				var fileref = document.createElement('script');
+            	fileref.setAttribute("type","text/javascript");
+            	fileref.setAttribute("src", demoURL);
+
+				if (adFormat == "banner")
+					document.getElementById("ad").appendChild(fileref);
+				else
+					document.getElementsByTagName("head")[0].appendChild(fileref);
+			}
+
+            </script>
+	<link rel="stylesheet" href="./css/demo.css">
+	<link rel="shortcut icon" href="../static/img/favicon.png">
+
+
+</head>
+<body>
+
+<div id="container">
+	<div id="logo">
+	<p><img src="../static/img/RP_logo.png" /></p>
+	</div>
+
+
+	<div id="nav">
+	<div class="box">HOME</div>
+	<div class="box">VIDEOS</div>
+	<div class="box">MUSIC</div>
+	<div class="box">NEWS</div>
+	<div class="box">DAILY</div>
+	<div class="box">ABOUT</div>
+	<div class="box">SOCIAL</div>
+	<div class="box">MORE</div>
+	</div>
+
+	<div id="imgheader">
+	<img src="images/bigimg.jpg">
+	</div>
+
+	<div id="main">
+	<h1>Red Panda brings highly viewable, relevant content to your audience</h1>
+
+	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque neque risus, dignissim sed quam id, consectetur auctor urna. Mauris vel nulla ex. Mauris eu libero sem. Pellentesque accumsan iaculis lorem, ornare porta dui laoreet sit amet. Cras rhoncus, elit eget maximus egestas, tellus magna varius nisl, ac condimentum tellus orci at arcu. Maecenas consectetur nisl et orci elementum, egestas consectetur purus laoreet. Sed justo dui, vehicula et tempus id, luctus sed ipsum. Vivamus euismod pellentesque odio vitae hendrerit. Donec aliquet aliquam massa, porta dignissim tortor dapibus sed. Sed malesuada lacinia leo vel commodo. Morbi quis tincidunt nisl. Integer id eros pretium tortor ullamcorper auctor.</p>
+
+	<p>Proin gravida facilisis justo nec vestibulum. Nullam nec libero ac quam consectetur ultricies. Donec dignissim ex eget iaculis suscipit. Phasellus posuere semper orci. Ut ac dolor vel magna commodo aliquam sed vel lectus. Sed sed blandit libero. Maecenas congue sollicitudin risus ac pretium. Nullam lacinia venenatis commodo. Proin ut mi in nisi pretium laoreet sit amet id nulla. Cras feugiat turpis sed fermentum maximus.
+	</p>
+	<p>In cursus lorem tempus, aliquam magna nec, laoreet odio. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nunc placerat dictum sapien, sed placerat ex vestibulum nec. In hac habitasse platea dictumst. Ut suscipit mattis lorem vel elementum. Cras a varius risus. Morbi pharetra congue mi in lobortis. Duis leo justo, gravida a orci ut, auctor malesuada orci. Vivamus sagittis et ante eget bibendum. Etiam consequat, est quis tincidunt mollis, justo diam laoreet dolor, id hendrerit mauris lectus quis ante.
+	</p>
+	<ul>
+	<li>Phasellus vel tellus suscipit, condimentum neque et, commodo magna.</li>
+	<li>Pellentesque ut arcu non mi rhoncus tristique a hendrerit leo.</li>
+	<li>Nulla posuere urna nec tortor imperdiet suscipit.</li>
+	</ul>
+	<p>
+	Nulla placerat pharetra nisi, vel eleifend ante scelerisque ut. Mauris consectetur erat elit, ut condimentum diam bibendum in. Maecenas ornare odio arcu, non lacinia eros vehicula vel. Cras id bibendum metus. Nam pulvinar sapien purus, non tincidunt metus euismod placerat. Fusce libero est, gravida ac ullamcorper tincidunt, lacinia id nunc. Quisque faucibus sapien eget dui blandit, sed porta nulla ornare. Morbi lacinia urna nisl, vel malesuada est commodo eget. Mauris at egestas risus. Aliquam erat volutpat. Curabitur eleifend malesuada orci ac aliquam.
+	</p>
+		<p id="redpandaAd">Advertisement</p>
+	<p>Cras mollis tempor nisl sit amet faucibus. Donec efficitur nunc non quam tristique, eget vehicula eros cursus. Ut ut ultricies massa, sit amet sodales odio. Nam tristique eu quam sed lobortis. Donec consectetur facilisis elit ut tincidunt. Integer vel nulla sodales augue aliquet eleifend. Nullam nulla mauris, consequat nec luctus vel, eleifend ut nisi. Morbi malesuada lacus in lorem pretium, id tincidunt est vestibulum. Mauris suscipit facilisis rutrum. Etiam tempus libero non sollicitudin ultrices. Nulla vitae libero vehicula augue volutpat semper at a risus. Donec et convallis enim, ac efficitur lacus. Nam tincidunt porta nulla, nec placerat velit lobortis sed. Nullam augue urna, ullamcorper vitae commodo et, commodo ut magna. In quis felis mattis, posuere nibh eu, consequat magna. Quisque iaculis risus odio.</p>
+	<p>
+	Sed non sem ornare quam pharetra convallis et ac libero. Mauris id viverra mauris. Donec posuere pulvinar libero sed maximus. Morbi sollicitudin molestie consequat. Vestibulum molestie lacus diam, ac dapibus massa interdum at. Curabitur porta risus vel dolor blandit accumsan. Duis eget purus feugiat, rutrum tellus ut, pretium ex. Donec aliquet, lectus in scelerisque mollis, mi nibh dapibus justo, eget scelerisque erat elit id quam. Aliquam a magna ut nisl elementum bibendum eleifend eget nulla. Nunc maximus ullamcorper consectetur. Fusce interdum augue ante, id viverra lacus dictum quis. Nunc mi tortor, eleifend sed neque nec, faucibus porta nunc. Vivamus condimentum nec urna non imperdiet. Maecenas efficitur porttitor rutrum. Fusce et laoreet nisi, et vestibulum eros.</p>
+
+	<ul>
+	<li>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
+	<li>Ut placerat mi feugiat, cursus sem vel, posuere dui.</li>
+	<li>Maecenas non purus suscipit, iaculis eros in, vestibulum est.</li>
+	</ul>
+	<p>
+	Mauris a massa diam. Aliquam luctus nisl non sollicitudin eleifend. Donec placerat vitae erat in laoreet. Suspendisse vestibulum velit at accumsan commodo. Curabitur dignissim vel elit non viverra. Curabitur metus enim, volutpat vitae dolor quis, fringilla convallis est. Pellentesque pellentesque blandit nibh eget dapibus.</p>
+	<p>
+	Morbi volutpat tempus nunc. Nam sit amet dolor velit. Phasellus non massa in elit malesuada fermentum. Suspendisse ultrices tristique interdum. Duis orci nibh, malesuada et egestas in, ornare ac tortor. Etiam aliquam ac ex a venenatis. Nullam sed ex ac quam vulputate condimentum. Praesent a metus nec dolor pulvinar viverra varius in tellus.
+	</p>
+	<p>
+	Nulla blandit commodo enim quis commodo. Phasellus tristique leo cursus dapibus imperdiet. Duis sed diam ultrices, pellentesque turpis vitae, fermentum nisi. Aliquam sit amet nibh dui. Cras et enim vulputate, iaculis arcu vitae, lobortis ante. Nunc aliquam nisi in massa tincidunt vestibulum. Phasellus vel lacinia metus. Donec vitae lectus arcu. Etiam et luctus velit. Nulla mi eros, vulputate vel gravida in, cursus non ipsum. Fusce non bibendum justo. Vivamus mollis consectetur lacus, nec tincidunt dolor consequat id. Proin sem ligula, bibendum sagittis sagittis placerat, semper sed elit.
+	</p>
+
+	</div>
+
+	<div id="RTgutter">
+		<div id="ad">
+		</div>
+	<img src="images/readmore.jpg" />
+	</div>
+</div>
+<div id="footer">
+	This is a demo page designed solely to demonstrate the various product placement/positions that Red Panda offers. If you have any questions please contact us for more info.
+</div>
+</body>
+</html>
+
+

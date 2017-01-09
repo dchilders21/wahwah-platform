@@ -1,0 +1,60 @@
+<div style="position: relative; left: 0px; height: 0px;">
+    <div class="row">
+    <div class="col-lg-12">
+        <h3 class="page-header text-asbestos analytics">
+            for
+            <popover-date-range-picker-link title="Dates" start-date="$ctrl.dates.startDate" end-date="$ctrl.dates.endDate"></popover-date-range-picker-link>
+        </h3>
+    </div>
+    </div>
+
+<div class="row" ng-if="$ctrl.availableMetrics.length > 0">
+    <div class="col-lg-12">
+        <h4>Metrics <i class="fa fa-question-circle" ng-tooltip data-placement="right" data-original-title="A quantifiable measure to assess performance, for the instance amount of impressions that was served or the amount of revenue that is owed."></i></h4>
+        <select ng-model="$ctrl.metricToAdd" ng-options="metric for metric in $ctrl.availableMetrics"></select>
+        <button role="button" ng-click="$ctrl.addMetric()" ng-disabled="!$ctrl.metricToAdd">Add Metric</button><br>
+        <tag-input selected-tags="$ctrl.selectedMetrics" options="$ctrl.availableMetrics" required></tag-input>
+    </div>
+</div>
+
+<div class="row" ng-if="$ctrl.availableDimensions.length > 0">
+    <div class="col-lg-12">
+        <h4>Dimensions <i class="fa fa-question-circle" ng-tooltip data-placement="right" data-original-title="An attribute that metrics are associated with, for instance the date that an impression was served on, the site that served a given impression, or the demand source that filled an impression. You can group or filter based on dimensions."></i></h4>
+        <select ng-model="$ctrl.dimensionToAdd" ng-options="dimension for dimension in $ctrl.availableDimensions | filter: $ctrl.checkDimensionEligibility"></select>
+        <button role="button" ng-click="$ctrl.addDimension()" ng-disabled="!$ctrl.dimensionToAdd">Add Dimension</button><br>
+        <tag-input selected-tags="$ctrl.selectedDimensions" options="$ctrl.availableDimensions"></tag-input>
+    </div>
+</div>
+
+<div class="row" ng-if="$ctrl.availableDimensions.length > 0">
+    <div class="col-lg-12">
+        <h4>Filters <i class="fa fa-question-circle" ng-tooltip data-placement="right" data-original-title="Filtering by a dimension member allows you to see the selected metrics only for a given member(s) of a selected dimension. For instance, if you have 2 different sites, you can show the metrics for just 1 site."></i></h4>
+        <select ng-model="$ctrl.dimensionToFilterOn" ng-options="dimension for dimension in $ctrl.availableDimensions | filter: $ctrl.checkDimensionFilterEligibility"></select>
+        <select ng-model="$ctrl.dimensionMemberToFilterOn" ng-options="member for member in $ctrl.availableMembers[$ctrl.dimensionToFilterOn]" ng-if="$ctrl.availableMembers[$ctrl.dimensionToFilterOn]"></select>
+        <button role="button" ng-click="$ctrl.addFilter()" ng-disabled="!$ctrl.dimensionMemberToFilterOn">Add Filter</button><br><br>
+        <div ng-repeat="(key,value) in $ctrl.selectedFilters">
+            {{key}} : <tag-input selected-tags="$ctrl.selectedFilters[key]" options="$ctrl.availableMembers[key]"></tag-input><br>
+        </div>
+    </div>
+</div>
+
+
+<div class="row" style="margin-top: 10px">
+    <div class="col-lg-12 top-btn" style="margin-bottom: 0px;">
+        <a class="btn btn-primary" ng-click="$ctrl.setExport()" ng-disabled="$ctrl.isLoading">Export</a>
+    </div>
+</div>
+
+
+
+<div ng-if="$ctrl.isLoading">
+    <div style="position: absolute; z-index: 1000; margin-left: -30px; top: 0px; left: 0px; min-width: 100vmax; height: 100vmax; background-color: rgba(30,30,50,0.3);"></div>
+    <div style="position: absolute; z-index: 1001; top: 0px; left: 0px; min-width: 100%; height: 100vh; background-color: transparent">
+        <div style="position: absolute; z-index: 1002; left: 50%; top: 50%; margin-left: -35px; margin-top: -40px;">
+            <i class="fa fa-4x fa-spinner fa-spin"></i>
+        </div>
+    </div>
+</div>
+
+
+</div>

@@ -1,0 +1,1 @@
+DROP TABLE __tmp_adconfig_adurl_backup_deleteme;

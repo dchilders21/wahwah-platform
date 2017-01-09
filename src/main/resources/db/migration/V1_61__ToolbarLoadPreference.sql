@@ -1,0 +1,1 @@
+ALTER TABLE product_toolbar ADD COLUMN load_preference ENUM('ALWAYS','ONLY_IF_AD_SHOWS') DEFAULT "always";

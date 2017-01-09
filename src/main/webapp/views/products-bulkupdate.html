@@ -1,0 +1,179 @@
+<!-- Created by Brian.Bober on 6/12/2015. -->
+
+<div class="row">
+    <div class="col-lg-12">
+
+        <ul class="breadcrumb no-margin no-padding text-asbestos">
+            <li><h3 class="page-header-nomargin text-asbestos"><a href="#/admin">Admin Options</a></h3> </li>
+
+            <li><h3 class="page-header-nomargin text-asbestos">Bulk Update</h3></li>
+
+        </ul>
+    </div>
+</div>
+
+<div class="row" ng-if="fatalErrorMsg != ''" style="color:red; height: 2em;" ng-model="fatalErrorMsg">{{fatalErrorMsg}}</div>
+
+
+<div ng-if="hasRole('SUPER_USER')">
+
+
+
+
+
+    <div class="panel-body" ng-if="state=='CHOOSE'">
+
+
+        <!-- TOGGLE -->
+
+
+
+        <div class="row">
+            Toggle all from:
+
+            <div style="display: inline-block" class="dropdown">
+                <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" style="width: 30em">{{toggleFrom.versionName }}<span class="caret"></span>
+
+                </button>
+                <ul class="dropdown-menu" style="width: 30em">
+                    <li ng-repeat="ver in productVersions"><a ng-click="changeToggleFrom(ver)">{{ver.versionName}}</a></li>
+                </ul>
+            </div>
+
+            to:
+
+            <div style="display: inline-block" class="dropdown">
+                <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" style="width: 30em">{{toggleTo.versionName }}<span class="caret"></span>
+
+                </button>
+                <ul class="dropdown-menu" style="width: 30em">
+                    <li ng-repeat="ver in productVersions"><a ng-click="changeToggleTo(ver)">{{ver.versionName}}</a></li>
+                </ul>
+            </div>
+            <button type="button" class="btn btn-primary" ng-click="toggle()">Toggle</button><br>
+            <i>Note: You still need to submit for the toggled changes to take affect.</i>
+        </div>
+
+        <br>
+
+
+
+
+
+        <!-- CHOOSE -->
+
+        <div class="row" ng-if="choose.products.length > 0">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <table class="table table-striped table-grid">
+                        <tbody>
+                        <tr ng-repeat="product in choose.products">
+
+                            <td>
+                                <input type="checkbox"
+                                       ng-model="choose.checked[product.id]">
+                            </td>
+                            <td>{{product.product_name}}</td>
+                            <td>{{getSiteNameById(product.site_id)}}</td>
+                            <td>Prod id: {{product.id}}</td>
+                            <td>Widget: {{getWidgetId(product)}}</td>
+                            <td>
+                                <div class="dropdown">
+                                    <span style="display: inline-block; min-width: 15em">Product Version:</span>
+                                    <button class="btn btn-primary dropdown-toggle" ng-disabled="!choose.checked[product.id]" data-toggle="dropdown" style="width: 30em">{{choose.newVersion[product.id].versionName }}<span class="caret"></span>
+
+                                    </button>
+                                    <ul class="dropdown-menu" style="width: 30em">
+                                        <li ng-repeat="ver in productVersions"><a ng-click="choose.newVersion[product.id] = ver">{{ver.versionName}}</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                            <td>
+                                Original: {{product.product_version_id.versionName}} <!-- Easy to forget original after selecting new version -->
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <button type="button" class="btn btn-primary" ng-click="choose.submit()">Submit</button>
+        </div>
+
+
+
+    </div>
+
+    <div class="panel-body" ng-if="state=='CONFIRM'">
+        <p>Bulk Update can make changes to a lot of tags at one time. Please verify you have chosen to update the right tags.
+            Except in certain limited circumstances, publishing your tag is irreversible.</p>
+
+        <form role="form">
+            <div class="form-group">
+                <label for="confirmPublish"><input type="checkbox" name="confirmPublish" id="confirmPublish" ng-model="hasConfirmedPublish">Check if you wish to continue publishing your tags</label>
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-primary pull-right" ng-click="uploadAll()" ng-disabled="!hasConfirmedPublish">Publish</button>
+            </div>
+        </form>
+    </div>
+
+
+    <div class="panel-body" ng-if="state=='PUBLISHING'">
+
+        <div id="uploadMonitor" class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Monitor Bulk Update Progress</h3>
+            </div>
+            <div class="panel-body">
+                <p>Bulk Update is in progress. <b><i>Do not close this page until bulk update is complete.</i></b></p>
+
+                <div id="uploadFileList">
+                    <div ng-repeat="tag in tagsToUpdate" class="well well-sm">
+                        <span class="fa fa-clock-o" ng-if="tag.status == 'Pending'"></span>
+                        <span class="fa fa-upload" ng-if="tag.status == 'Upload'"></span>
+                        <span class="fa fa-spinner" ng-if="tag.status == 'Update'"></span>
+                        <span class="fa fa-check" ng-if="tag.status == 'Complete'"></span>
+                        <span class="fa fa-exclamation-circle" ng-if="tag.status == 'Error'" style="color: red"></span>
+                        {{tag.name}} (id: {{tag.id}} widgetId: {{tag.widget_id}} )<span ng-if="tag.errorMsg" style="color: red">***{{tag.errorMsg}}!</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="panel panel-default ng-scope" ng-if="state == 'DONE'">
+        <div class="panel-heading">
+            <h3 class="panel-title">Bulk Update Complete</h3>
+        </div>
+        <div class="panel-body">
+            <p>Your tags below have been updated and published. It might take a few minutes for the new version to propagate throughout the Internet.</p>
+
+        </div>
+    </div>
+
+
+<div ng-if="state == 'DONE' || state == 'CONFIRM'">
+    <div ng-if="state == 'CONFIRM'">The following tags will be updated and uploaded:</div>
+    <div ng-if="state == 'DONE'">The following tag updates were successful:</div>
+    <ul id="confirmList" >
+        <li ng-repeat="tag in tagsToUpdate" ng-if="tag.failed != true">
+            {{tag.name}} ( {{getVersionById(tag.oldVersion).versionName}} -> {{getVersionById(tag.newVersion).versionName}} )
+        </li>
+    </ul>
+
+</div>
+
+    <div ng-if="state == 'DONE' && update.anyFailed == true" style="color: red">
+The following updates failed. Please try these again, and contact support if issue continues:
+    <ul id="errorList" ng-if="state == 'DONE' || state == 'CONFIRM'">
+        <li ng-repeat="tag in tagsToUpdate" ng-if="tag.failed == true">
+            {{tag.name}} ( {{getVersionById(tag.oldVersion).versionName}} -> {{getVersionById(tag.newVersion).versionName}} ) <span ng-if="tag.errorMsg" style="color: red">***{{tag.errorMsg}}!</span>
+        </li>
+    </ul>
+
+    </div>
+
+</div>

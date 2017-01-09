@@ -1,0 +1,88 @@
+<div class="row" ng-if="account">
+    <div class="col-lg-12">
+        <h3 class="page-header-nomargin text-asbestos">Edit User: {{editUser.firstName}} {{editUser.lastName}}</h3>
+    </div>
+</div>
+
+<div class="row" ng-if="editUser.userId">
+    <div class="col-lg-12">
+        <div class="alert alert-success" ng-if="showProfileCreatedAlert"><strong>User Created</strong> The user has been created with the specified personal information and roles.</div>
+        <div class="alert alert-success" ng-if="showProfileUpdatedAlert"><strong>Profile Updated</strong> The user has been updated with the new personal information</div>
+        <div class="alert alert-success" ng-if="showRolesUpdatedAlert"><strong>Profile Updated</strong> The user has been updated with the new roles</div>
+        <div class="alert alert-danger" ng-if="showPublisherNameInvalidAlert"><strong>Profile Not Updated</strong> The publisher with the name provided does not exist</div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="alert alert-warning" ng-if="showLoginChangeAlert">
+            <button type="button" class="close" ng-click="hideDeleteWarning()">&times;</button>
+            <strong>Warning!</strong> The user <em>{{editUser.firstName}} {{editUser.lastName}}</em> will no longer be able to login. <a ng-click="confirmLoginChange()" class="alert-link">Confirm Disable Login</a>
+        </div>
+    </div>
+</div>
+
+<form role="role" name="userEditForm">
+    <div class="row" ng-if="editUser.userId">
+        <div class="col-lg-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Personal Information</h3>
+                </div>
+                <div class="panel-body">
+                    <div ng-form role="form" class="form" name="profileForm">
+                        <div class="form-group">
+                            <label for="firstName" class="control-label">First Name</label>
+                            <input type="text" class="form-control" id="firstName" placeholder="Enter First Name" ng-model="editUser.firstName">
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName" class="control-label">Last Name</label>
+                            <input type="text" class="form-control" id="lastName" placeholder="Enter Last Name" ng-model="editUser.lastName">
+                        </div>
+                        <div class="form-group">
+                            <label for="emailAddress" class="control-label">Email Address</label>
+                            <input type="email" class="form-control" id="emailAddress" placeholder="Enter Email Address" ng-model="editUser.emailAddress">
+                        </div>
+                        <div class="form-group has-feedback" ng-if="hasRole('SUPER_USER') && (!roleSelections['SUPER_USER'] && !roleSelections['DEVELOPER'] && !roleSelections['INTERNAL_USER'])" ng-class="{'has-error': publisherNameInvalid}">
+                            <label for="accountName" class="control-label">Publisher</label>
+                            <input type="text" class="form-control" id="accountName" placeholder="Enter Publisher Name" ng-model="editUser.accountName" ng-typeahead url="{{publisherQuery}}" filter="onPublisherFilter(parsedResponse)">
+                        </div>
+                        <div class="form-group">
+                            <label for="login-enabled" class="control-label">Login Enabled</label>
+                                <input type="checkbox" name="loginEnabled"
+                                       ng-model="editUser.loginEnabled" id="login-enabled" ng-change="loginEnabledChangeConfirm()">
+                        </div>
+                        <br/>
+                        <div class="form-group">
+                            <button type="button" ng-disabled="!loginSettingApproved" class="btn btn-primary" ng-click="savePersonalInformation()">Update Information</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6" ng-if="editUser.userId">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Roles</h3>
+                </div>
+
+                <div class="panel-body">
+                    <div ng-form role="form" class="form" name="roleForm">
+                        <div class="checkbox" ng-repeat="role in roles">
+                            <label>
+                                <input type="checkbox" ng-model="roleSelections[role]"> {{displayRole(role)}}
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary" ng-click="saveRoles()">Update Roles</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</form>

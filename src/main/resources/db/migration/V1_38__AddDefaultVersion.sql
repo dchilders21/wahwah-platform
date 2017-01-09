@@ -1,0 +1,1 @@
+ALTER TABLE product_versions ADD COLUMN is_default BIT(1) NOT NULL DEFAULT 0;

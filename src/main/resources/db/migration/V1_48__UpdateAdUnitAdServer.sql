@@ -1,0 +1,1 @@
+ALTER TABLE ad_units CHANGE ad_server ad_server ENUM('OPEN_X', 'GENERIC_URL') NOT NULL;

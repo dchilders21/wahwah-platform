@@ -1,0 +1,1 @@
+ALTER TABLE ad_units ADD COLUMN external_id2 VARCHAR(255);

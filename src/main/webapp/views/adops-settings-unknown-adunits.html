@@ -1,0 +1,35 @@
+<div class="row">
+    <div class="col-lg-12">
+
+        <ul class="breadcrumb no-margin no-header text-asbestos">
+            <li><h3 class="page-header-nomargin text-asbestos">Ad Ops</h3></li>
+            <li><h3 class="page-header-nomargin text-asbestos">Unknown Ad Units</h3></li>
+        </ul>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default" ng-if="unknownAdUnits.length > 0">
+
+            <div class="panel-heading">Unknown Ad Units</div>
+
+                <table class="table table-bordered">
+                    <thead>
+                    <tr><th>Publisher</th><th>Site</th><th>AUID</th><th>Ad Size</th><th>Impressions</th><th>Revenue</th></tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="row in unknownAdUnits">
+                        <td>{{row.publisher_name}}</td>
+                        <td>{{row.site_name}}</td>
+                        <td>{{row.auid}}</td>
+                        <td>{{row.width}} x {{row.height}}</td>
+                        <td>{{row.impressions|number}}</td>
+                        <td>${{row.revenue|number: 2}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

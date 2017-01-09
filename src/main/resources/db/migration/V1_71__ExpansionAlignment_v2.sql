@@ -1,0 +1,2 @@
+ALTER TABLE product_standalone_ad ADD expansion_align_horiz ENUM('left', 'right', 'center') NOT NULL DEFAULT 'right';
+ALTER TABLE product_standalone_ad ADD expansion_align_vert ENUM('top', 'bottom', 'middle') NOT NULL DEFAULT 'bottom';

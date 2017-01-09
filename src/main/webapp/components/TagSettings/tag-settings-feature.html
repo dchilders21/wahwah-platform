@@ -1,0 +1,54 @@
+<div class="panel panel-default">
+    <div class="panel-body">
+
+        <div class="row">
+            <form name="availableFeaturesForm" class="form-inline">
+                <div class="form-group">
+                    <label for="features-tab-available-features">Available Features</label>
+                    <select style="width: auto" class="form-control" id="features-tab-available-features" ng-disabled="$ctrl.tag.product.is_locked" ng-model="$ctrl.selectedFeatureToAdd" ng-options="feature.display for feature in $ctrl.availableFeatures track by feature.id"></select>
+                </div>
+                <button class="btn btn-primary" ng-click="$ctrl.addSelectedFeature()" ng-disabled="$ctrl.tag.product.is_locked">Add Feature</button>
+            </form>
+        </div>
+
+        <br>
+        <h3>Installed Features</h3>
+
+        <div class="row" ng-if="$ctrl.tag.product.features.length > 0">
+            <table class="table table-grid table-striped">
+                <thead>
+                <tr><th>Feature Name</th><th>Feature Description</th><th></th></tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="feature in $ctrl.tag.product.features"><td><p>{{feature.feature.name}}</p></td><td><p>{{feature.feature.description}}</p></td><td><a class="action-icon" ng-click="$ctrl.removeFeature(feature)"><i class="fa fa-2x fa-times"></i></a></td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="row" ng-if="$ctrl.tag.product.features.length == 0">
+            <p>This site doesn't have any installed features.</p>
+        </div>
+
+        <h3>Available Options</h3>
+
+        <div class="row" ng-if="($ctrl.tag.product.features|filter:{variable_type:'!NONE'}).length > 0">
+
+            <form name="selectedFeatureVariables" class="form-horizontal">
+                <div class="form-group" ng-repeat="feature in $ctrl.tag.product.features">
+                    <label for="feature-variable-{{feature.feature.id}}" class="col-sm-3 control-label">{{feature.feature.variable_label}}</label>
+                    <div class="col-sm-8">
+                        <input ng-if="feature.feature.variable_type == 'STRING'" type="text" id="feature-variable-{{feature.feature.id}}" class="form-control" ng-model="feature.value_string">
+                        <input ng-if="feature.feature.variable_type == 'NUMBER'" type="number" id="feature-variable-{{feature.feature.id}}" class="form-control" ng-model="feature.value_number">
+                        <input ng-if="feature.feature.variable_type == 'BOOLEAN'" type="checkbox" id="feature-variable-{{feature.feature.id}}" class="form-control" ng-model="feature.value_boolean">
+                    </div>
+                </div>
+            </form>
+
+        </div>
+
+        <div class="row" ng-if="($ctrl.tag.product.features|filter:{variable_type:'!NONE'}).length == 0">
+            <p>None of the installed features have any available options.</p>
+        </div>
+
+    </div>
+</div>

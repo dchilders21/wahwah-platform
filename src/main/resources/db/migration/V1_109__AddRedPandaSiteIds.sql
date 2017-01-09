@@ -1,0 +1,1 @@
+ALTER TABLE sites ADD COLUMN marketplace_site_id INT DEFAULT NULL;

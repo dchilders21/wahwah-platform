@@ -1,0 +1,17 @@
+<div class="panel-group"  role="tablist" aria-multiselectable="true">
+    <div class="panel panel-default" ng-repeat="listItem in $ctrl.listItems">
+        <div class="panel-heading" role="tab">
+            <h4 class="panel-title">
+                <a ng-if="!$ctrl.headerTemplateUrl" ng-class="{collapsed: listItem != $ctrl.selectedListItem}" role="button" aria-expanded="true" ng-click="$ctrl.openListItem(listItem)">{{$eval($ctrl.listItemName,listItem)}}</a>
+                <ng-include ng-if="$ctrl.headerTemplateUrl" src="$ctrl._headerTemplateUrl"></ng-include>
+            </h4>
+        </div>
+        <div class="panel-collapse collapse" role="tabpanel" ng-class="{in: listItem == $ctrl.selectedListItem}">
+            <div class="panel-body line-item-dropdown">
+                <ul class="nav nav-pills nav-stacked">
+                    <ng-include src="$ctrl._itemTemplateUrl"></ng-include>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

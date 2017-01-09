@@ -1,0 +1,1 @@
+ALTER TABLE publisher_revenue_model MODIFY COLUMN start_date DATE NULL;

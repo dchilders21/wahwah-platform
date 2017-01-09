@@ -1,0 +1,22 @@
+CREATE TABLE audit_action_types (
+  id INT NOT NULL AUTO_INCREMENT,
+  name VARCHAR(255) NOT NULL,
+  value VARCHAR(255) NOT NULL UNIQUE,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
+CREATE TABLE audit_log (
+  id INT NOT NULL AUTO_INCREMENT,
+  action_type_id INT NOT NULL,
+  entry_time DATETIME NOT NULL,
+  description VARCHAR(255) NOT NULL,
+  comment_msg VARCHAR(255) NULL,
+  user_email_address VARCHAR(255) NOT NULL,
+  account_name VARCHAR(255) NOT NULL,
+  user_id INT NULL,
+  account_id INT NULL,
+  PRIMARY KEY (id),
+  FOREIGN KEY (action_type_id) REFERENCES audit_action_types(id) ON DELETE CASCADE,
+  FOREIGN KEY (user_id) REFERENCES  users(id) ON DELETE SET NULL,
+  FOREIGN KEY (account_id) REFERENCES accounts(id) ON DELETE SET NULL
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;

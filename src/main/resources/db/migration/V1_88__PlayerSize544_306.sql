@@ -1,0 +1,1 @@
+UPDATE ad_units SET width=544, height=306 WHERE unit_type='VIDEO' AND width=400;

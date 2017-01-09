@@ -1,0 +1,1 @@
+ALTER TABLE creatives MODIFY COLUMN tag_contents LONGTEXT NOT NULL;

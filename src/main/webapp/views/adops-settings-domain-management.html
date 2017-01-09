@@ -1,0 +1,89 @@
+<div class="row">
+    <div class="col-lg-12">
+
+        <ul class="breadcrumb no-margin no-header text-asbestos">
+            <li><h3 class="page-header-nomargin text-asbestos">Ad Ops</h3></li>
+            <li><h3 class="page-header-nomargin text-asbestos">Domain Administration</h3></li>
+        </ul>
+    </div>
+</div>
+
+<div class="panel panel-default" style="margin-bottom: 0px;">
+    <div class="panel-heading">Unmapped Domains</div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="alert alert-danger" ng-if="errorMsg != ''"><strong>Error</strong> {{ errorMsg }}</div>
+        </div>
+    </div>
+
+    <div class="row unmapped">
+        <div class="col-md-5" style="min-height: 32em; width: 38%;">
+
+            <div class="row" style="margin-bottom: 10px;">
+                <!-- <div class="col-md-2" style="text-align: right">
+                    Search:
+                </div> -->
+                <div class="col-md-12">
+                    <input type="text" class="form-control" required ng-model="filter" placeholder="Search Unmapped Domains" style="width: 100%"/>
+                </div>
+            </div>
+
+
+                <div class="form-group">
+                    <select multiple class="form-control" id="domain-select-unmapped" ng-model="unmappedSelected"  style="min-height: 30em; min-width: 15em;"
+                               ng-options="domainEntry as domainEntry.domain for domainEntry in unmappedDomainListFiltered"/>
+                </div>
+
+
+        </div>
+        <div class="col-md-2" style="min-height: 32em; width: 22.5%;">
+            <div style="display: table; table-layout: fixed; min-height: 30em; margin: 0 auto;">
+
+                <div style="display: table-cell; vertical-align: middle; ">
+
+
+                    <button type="button" class="btn btn-primary" ng-disabled="chosenSite == '' || unmappedSelected.length ==0" ng-click="add()" style="margin-left: 8px;">Map Domain &gt;&gt;</button><br>
+                    <br>
+                    <button type="button" class="btn btn-primary" ng-disabled="chosenSite == ''|| siteSelected.length ==0" ng-click="remove()">&lt;&lt; Unmap Domain</button><br>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-5" style="min-height: 32em; width: 38%;">
+
+                <div class="form-group">
+                    <label for="publisherName" class="col-sm-3   control-label" style="font-weight: normal;">Publisher:</label>
+                    <div class="col-sm-9" style="margin-bottom: 10px;" >
+                        <input type="text" class="form-control" id="publisherName" placeholder="Enter Publisher Name" ng-model="publisher" ng-typeahead url="{{publisherQuery}}" filter="onPublisherFilter(parsedResponse)">
+                    </div>
+                </div>
+
+
+            <div class="form-group">
+                <label for="siteName" class="col-sm-3 control-label" style="font-weight: normal;">Site:</label>
+                <div class="col-sm-9" style="margin-bottom: 10px;">
+                    <select class="form-control" id="siteName" name="siteName" ng-model="chosenSite"
+                            ng-options="site.site_name for site in siteList" required id="site-name"/>
+                </div>
+            </div>
+
+            <div class="col-sm-12" >
+                <div style="margin-top: 1em">
+                    <select multiple class="form-control" id="domain-select-mapped"  ng-model="siteSelected" style="min-height: 22em; "
+                    ng-options="domainEntry as domainEntry.domain for domainEntry in chosenSiteDomainList" />
+                </div>
+            </div>
+
+
+            <div class="col-sm-12" style="margin-top: 1em; padding-left: 0px;">
+                <div class="col-sm-10" >
+                    <input class="form-control" type="text" required ng-model="manualCreateDomain" style="width: 100%;" ng-disabled="chosenSite == ''" placeholder="Add Custom Domain"/>
+                </div>
+                <div class="col-sm-2" style="text-align: right; padding-left: 0px;">
+                    <button type="button" class="btn btn-primary" ng-click="createDomain()" ng-disabled="chosenSite == ''" placeholder="Add Custom Domain">Add</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

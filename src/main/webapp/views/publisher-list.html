@@ -1,0 +1,105 @@
+<!-- START publisher-list -->
+<div class="row same-height-row">
+    <div class="col-lg-8">
+        <ul class="breadcrumb page-header text-asbestos no-margin no-padding">
+            <li ng-if="network.id == null && options.seeAll==false"><h3 class="page-header-nomargin text-asbestos">Red Panda Marketplace</h3></li>
+            <li ng-if="network.id == null && options.seeAll==true"><h3 class="page-header-nomargin text-asbestos"><a href="#/networks">All Networks</a></h3></li>
+            <li ng-if="network.id != null"><h3 class="page-header-nomargin text-asbestos" ><a href="#/network/{{network.id}}">{{network.currentNetwork.name}}</a></h3></li>
+            <li><h3 class="page-header-nomargin text-asbestos">Publishers</h3></li>
+        </ul>
+    </div>
+
+    <div class="col-lg-4 same-height-col" style="text-align: right; vertical-align: bottom">
+        <div >
+            <a ng-if="network.id != null" class="action-icon" href="#/networks/{{network.id}}" title="Edit Network"><i class="fa fa-2x fa-edit"></i></a>
+
+            <!-- Don't allow download of all publishers' tags since it takes way too long -->
+            <a ng-if="network.id != null && publishers.length > 0 && !network.is_archived" href="{{getNetworkAllTagDownloadUrl(network.id)}}" target="_blank" download title="Download all tags"><i class="fa fa-2x fa-download"></i></a>
+            <a ng-if="network.id != null && publishers.length > 0 && !network.is_archived" href="{{getNetworkUniversalTagDownloadUrl(network.id)}}" target="_blank" download title="Download universal network tag"><i class="fa fa-2x fa-cloud-download"></i></a>
+        </div>
+    </div>
+
+</div>
+
+<br />
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="alert alert-warning" ng-if="showConfirmDeleteAlert">
+            <button type="button" class="close" ng-click="hideDeleteWarning()">&times;</button>
+            <strong>Warning!</strong> The publisher <em>{{pubToDelete.name}}</em> will be deleted permanently and cannot be recovered. <a ng-click="performDelete()" class="alert-link">Confirm Deletion</a>&nbsp;<i ng-show="showCog" class="fa fa-1x fa-cog fa-spin"></i>
+        </div>
+        <div class="alert alert-danger" ng-if="showError"><strong>Error</strong> {{errorMsg}}</div>
+    </div>
+</div>
+
+
+<div class="row"  ng-if="hasRole('INTERNAL_USER') || hasRole('NETWORK_ADMIN')">
+    <div class="col-lg-8" ng-if="network.id == null" >
+        <a class="btn btn-primary" href="#/publishers/create">Create New Publisher</a>
+    </div>
+    <div class="col-lg-8 top-btn" ng-if="network.id != null && !network.currentNetwork.is_single_publisher">
+        <a class="btn btn-primary" href="#/network-{{network.id}}/publishers/create">Create New Publisher</a>
+    </div>
+
+    <div class="col-lg-4">
+        <div ng-if="network.id == null" class="form-group" style="text-align: right">
+            <label for="see-all" >See all</label>
+                <input type="checkbox" ng-model="options.seeAll" id="see-all" ng-change="changeSeeAll()"/>
+        </div>
+    </div>
+</div>
+
+<div class="row" ng-if="publishers.length == 0">
+    No publishers found
+    </div>
+
+<div class="row" ng-if="publishers.length > 0">
+    <div class="col-lg-12">
+
+        <div class="panel panel-default">
+            <table class="table table-striped table-grid">
+                <thead>
+                    <tr><th>Name</th><th></th></tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="publisher in publishers | filter: {is_default:false}">
+
+                        <td ng-click="selectPublisher(publisher)">{{publisher.name}}</td>
+                        <td class="actions actions-4" ng-if="hasRole('NETWORK_ADMIN') || hasRole('INTERNAL_USER')">
+                            <a ng-if="publisher.site_count > 0 && !publisher.is_archived" class="action-icon" href="{{getPublisherAllTagDownloadUrl(publisher.id)}}" target="_blank" download title="Download all tags"><i class="fa fa-2x fa-download"></i></a>
+                            <a ng-if="publisher.site_count > 0 && !publisher.is_archived" class="action-icon" href="{{getPublisherUniversalPublisherTagDownloadUrl(publisher.id)}}" target="_blank" download title="Download universal publisher tag"><i class="fa fa-2x fa-cloud-download"></i></a>
+                            <a class="action-icon" href="#/publishers/{{publisher.id}}"><i class="fa fa-2x fa-edit"></i></a>
+                            <a class="action-icon" ng-click="deletePublisher(publisher)" ng-if="hasRole('SUPER_USER') && publisher.parent_account_id != 145 && publisher.redpanda_publisher_creator_id == null"><i class="fa fa-2x fa-times"></i></a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+    </div>
+</div>
+
+<div class="row" ng-if="publishers.length > 0">
+    <div class="col-lg-12 text-center">
+        <nav>
+            <ul class="pagination">
+                <li ng-class="{disabled: page.current == 0}">
+                    <a aria-label="Previous" ng-click="openPage('previous')">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <li ng-repeat="page in pages" ng-class="{active: page.index == $parent.page.current}">
+                    <a ng-click="openPage(page.index)">{{page.number}}</a>
+                </li>
+                <li ng-class="{disabled: page.current == page.total - 1}">
+                    <a aria-label="Next" ng-click="openPage('next')">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+<!-- END publisher-list -->

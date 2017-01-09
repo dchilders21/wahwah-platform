@@ -1,0 +1,3 @@
+PULSEPOINT;biddable,blank-on-nofill
+ALTITUDE_DIGITAL;error-on-nofill
+TREMOR_MEDIA;blank-on-nofill

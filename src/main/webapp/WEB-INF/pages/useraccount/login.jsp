@@ -1,0 +1,148 @@
+
+<%--
+  Created by IntelliJ IDEA.
+  User: Justin
+  Date: 3/17/14
+  Time: 10:41 PM
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri = "http://platform.wahwahnetworks.com/jsp/tags/" prefix = "wahwah"%>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0">
+    <script type="text/javascript" src="//use.typekit.net/zhw6pvj.js"></script>
+    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+
+    <title>Red Panda Platform</title>
+
+    <wahwah:link rel="stylesheet" href="content/static/css/static.css"></wahwah:link>
+    <wahwah:link rel="stylesheet" href="content/static/css/bootstrap-dropdown.css"></wahwah:link>
+
+    <!-- TypeKit Fonts for Proxima Nova -->
+    <!-- <script src="//use.typekit.net/ukx4mpx.js"></script>
+    <script>try{Typekit.load();}catch(e){}</script> -->
+
+    <!-- Google Fonts for Roboto -->
+    <link href='http://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700' rel='stylesheet' type='text/css'>
+
+    <link rel="shortcut icon" href="${pageContext.request.contextPath}/content/static/img/favicon.png">
+
+    <script type="text/javascript">
+
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-41853403-1']);
+        _gaq.push(['_trackPageview']);
+
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+
+    </script>
+
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+</head>
+</head>
+<body class="authentication">
+<div class="container auth">
+    <header class="home-header">
+        <div class="inner-wrapper">
+            <div class="branding">
+                <h1 class="logo"><a href="${pageContext.request.contextPath}/"><img src="${pageContext.request.contextPath}/content/static/img/redPanda_Copy.png" alt="Red Panda Platform"/></a></h1>
+            </div>
+        </div>
+    </header>
+
+
+
+    <section class="auth-form">
+        <div class="inner-wrapper">
+
+            <h2>Login</h2>
+
+            <form action="" method="post" id="_form" class="form-horizontal">
+
+
+                <fieldset>
+
+                    ${errorMessage}
+
+                    <c:if test="${needsActivation}">
+                        <p class="error_message">We could not log you in because your account has not been activated yet.</p>
+                        <p>You can activate your account by clicking on the activation link we sent you. If you lost the email, we can <a href="${pageContext.request.contextPath}/useraccount/activate/resend/${emailAddressEncoded}" style="color: #1ABC9C">resend your activation email</a>.</p>
+                    </c:if>
+
+                    <div class="control-group required">
+                        <!-- <label class="control-label" for="id_email">Email</label> -->
+
+                        <div class="controls">
+                            <input id="id_email" type="email" name="emailAddress" maxlength="254" placeholder="Email"/>
+                        </div>
+                    </div>
+
+
+
+                    <div class="control-group required">
+                       <!-- <label class="control-label" for="id_password">Password</label> -->
+
+                        <div class="controls">
+                            <input type="password" name="password" id="id_password" placeholder="Password"/>
+
+                        </div>
+                    </div>
+
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="rememberMe"/> Remember me
+                        </label>
+                    </div>
+
+                    <div class="form-actions">
+                        <div id="center-submit"><input class="btn btn-primary" type="submit" value="Login" /></div>
+
+                            <a href="${pageContext.request.contextPath}/useraccount/forgot_password/" class="btn">Forgot Password</a><br>
+                        <a href="${pageContext.request.contextPath}/useraccount/register/" class="btn">Don't have a Red Panda Platform account? Register today</a>
+
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </section>
+
+
+    <footer class="footer">
+        <div id="footer-logo"><img src="${pageContext.request.contextPath}/content/static/img/redPanda.png" width="90px" height="90px"/></div>
+            <ul class="nav">
+                <li><a href="http://www.redpandaplatform.com" target="_blank">About Red Panda Platform</a></li>
+                <li><a href="mailto:support@redpandaplatform.com" target="_blank">Support</a></li>
+                <li><a href="http://www.redpandaplatform.com/tos" target="_blank">Terms of Service</a></li>
+                <li><a href="http://www.redpandaplatform.com/privacy-policy/" target="_blank">Privacy Policy</a></li>
+            </ul>
+    </footer>
+</div> <!-- end .container -->
+
+
+
+
+
+<script text="type/javascript">
+    // Responsive Carousel
+    $('#use-cases').bxSlider({
+        slideWidth: 540,
+        minSlides: 2,
+        maxSlides: 2,
+        slideMargin: 20
+    });
+
+    $('.faqs').simpleFAQ();
+</script>
+
+</body>
+</html>
+

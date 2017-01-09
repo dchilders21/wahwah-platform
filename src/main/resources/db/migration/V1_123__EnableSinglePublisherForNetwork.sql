@@ -1,0 +1,2 @@
+ALTER TABLE account_networks ADD COLUMN single_publisher_id INT NULL;
+ALTER TABLE account_networks ADD FOREIGN KEY fk_network_single_publisher(single_publisher_id) REFERENCES account_publishers(account_id);

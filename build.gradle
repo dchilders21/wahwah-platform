@@ -1,0 +1,145 @@
+apply plugin: 'war'
+apply plugin: 'kotlin'
+
+version = '4.1.10'
+
+war.archiveName = 'wahwahplatform.war' // We can skip a rename if we do this
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.11'
+}
+
+// Build Script Properties
+buildscript {
+
+    // Define Versions For Related Packages
+    ext {
+        springVersion = '4.3.2.RELEASE'
+        springDataJPAVersion = '1.10.2.RELEASE'
+        springRabbitVersion = '1.5.5.RELEASE'
+        jacksonVersion = '2.7.4'
+        kotlin_version = '1.0.2'
+    }
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'org.ajoberstar:gradle-git:1.3.0'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+import org.ajoberstar.grgit.Grgit;
+
+// Import Repositories
+repositories {
+    mavenCentral()
+}
+
+
+
+// Maven Dependencies
+dependencies {
+
+    compile "org.springframework:spring-core:$springVersion"
+    compile "org.springframework:spring-web:$springVersion"
+    compile "org.springframework:spring-webmvc:$springVersion"
+    compile "org.springframework:spring-orm:$springVersion"
+    compile "org.springframework:spring-context-support:$springVersion"
+    compile "org.springframework:spring-messaging:$springVersion"
+    compile "org.springframework:spring-websocket:$springVersion"
+
+    compile "org.springframework.data:spring-data-jpa:$springDataJPAVersion"
+    compile "org.springframework.amqp:spring-rabbit:$springRabbitVersion"
+
+    compile "org.hibernate:hibernate-entitymanager:5.1.0.Final"
+    compile "org.hibernate:hibernate-validator:5.2.2.Final"
+
+    compile ('org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.0.Final'){
+        exclude module: 'xml-apis'
+    }
+
+    compile 'xerces:xercesImpl:2.11.0'
+
+    compile 'com.newrelic.agent.java:newrelic-api:3.25.0'
+
+    compile 'org.apache.velocity:velocity:1.7'
+
+    compile "com.fasterxml.jackson.core:jackson-core:$jacksonVersion"
+    compile "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
+    compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonVersion:"
+    compile "com.fasterxml.jackson.module:jackson-module-kotlin:2.7.1-2"
+
+
+    compile "org.flywaydb:flyway-core:4.0"
+
+    compile 'com.jcraft:jsch:0.1.53'
+
+    compile 'org.eclipse.jgit:org.eclipse.jgit:4.0.1.201506240215-r'
+
+    compile "org.apache.httpcomponents:httpclient:4.5"
+
+    compile 'org.scribe:scribe:1.3.7'
+
+    compile "commons-net:commons-net:3.3"
+    compile "commons-codec:commons-codec:1.10"
+    compile "org.apache.commons:commons-compress:1.10"
+    compile 'org.apache.commons:commons-lang3:3.4'
+    compile "org.tukaani:xz:1.5"
+    compile "commons-io:commons-io:2.4"
+    compile 'org.apache.commons:commons-csv:1.2'
+    compile 'commons-validator:commons-validator:1.4.0'
+
+    compile "log4j:log4j:1.2.17"
+    compile 'org.slf4j:slf4j-log4j12:1.7.21'
+
+    compile "javax.servlet:jstl:1.2"
+
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+
+    compile "com.google.api-ads:ads-lib:2.12.0"
+    compile 'com.google.api-client:google-api-client:1.19.1'
+    compile 'com.google.apis:google-api-services-adsense:v1.4-rev158-1.21.0'
+    compile 'com.google.apis:google-api-services-adexchangeseller:v2.0-rev97-1.19.1'
+
+    compile ('com.google.oauth-client:google-oauth-client-servlet:1.20.0'){
+        exclude module: 'servlet-api'
+    }
+
+    providedCompile "javax.servlet:javax.servlet-api:3.1.0"
+    providedCompile "javax.servlet.jsp:javax.servlet.jsp-api:2.3.1"
+    providedCompile "com.sun.mail:javax.mail:1.5.2"
+
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testCompile "org.springframework:spring-test:$springVersion"
+}
+
+task updateWahwahProperties << {
+
+    // Try Getting Commit ID from TeamCity first
+    def commit_id = System.getenv('BUILD_VCS_NUMBER');
+
+    if(commit_id == null){
+        commit_id = System.getenv('BUILD_VCS_NUMBER_WahwahPlatform_PlatformRepo')
+    }
+
+    if(commit_id == null) {
+        def repo = Grgit.open(dir: projectDir.absolutePath);
+        commit_id = repo.head().id;
+    }
+
+    java.util.Properties properties = new java.util.Properties();
+    String propertyFileName = projectDir.absolutePath + "/src/main/resources/wahwahplatform.properties";
+    properties.load(new java.io.FileInputStream(propertyFileName));
+    properties.setProperty("version",version);
+    properties.setProperty("git_commit_id",commit_id)
+    properties.store(new java.io.FileOutputStream(propertyFileName),"Saved By Gradle");
+}
+
+compileJava.dependsOn(updateWahwahProperties)
+
+sourceSets {
+    main.java.srcDirs += 'src/main/kotlin'
+};

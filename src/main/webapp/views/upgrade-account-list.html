@@ -1,0 +1,65 @@
+<div class="row">
+    <div class="col-lg-12">
+
+        <ul class="breadcrumb no-margin no-header text-asbestos">
+            <li><h3 class="page-header-nomargin text-asbestos">Admin Options</h3></li>
+            <li><h3 class="page-header-nomargin text-asbestos">Upgrade Accounts</h3></li>
+        </ul>
+    </div>
+</div>
+
+<div class="row" ng-if="$ctrl.accounts.length == 0">
+    No publishers found
+</div>
+
+<div class="row" ng-if="$ctrl.accounts.length > 0">
+    <div class="col-lg-12">
+
+        <div class="panel panel-default">
+            <table class="table table-striped table-grid">
+                <thead>
+                <tr><th>Name</th><th>Type</th><th>Contact Name</th><th>Contact Email</th><th></th></tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="account in $ctrl.accounts">
+
+                    <td ng-click="$ctrl.selectAccount(account)">{{account.name}}</td>
+                    <td>{{account.account_type|capitalize}}</td>
+                    <td>{{account.contact_name}}</td>
+                    <td>{{account.contact_email}}</td>
+                    <td></td>
+
+                    <!--
+                    <td class="actions actions-2" ng-if="hasRole('PUBLISHER_ADMIN')">
+                        <a class="action-icon" href="#/publishers/{{publisher.id}}"><i class="fa fa-2x fa-edit"></i></a>
+                        <a class="action-icon" ng-click="deletePublisher(publisher)" ng-if="hasRole('SUPER_USER') && publisher.parent_account_id != 145 && publisher.redpanda_publisher_creator_id == null"><i class="fa fa-2x fa-times"></i></a>
+                    </td>
+                    -->
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="row" ng-if="$ctrl.accounts.length > 0">
+    <div class="col-lg-12 text-center">
+        <nav>
+            <ul class="pagination">
+                <li ng-class="{disabled: $ctrl.page.current == 0}">
+                    <a aria-label="Previous" ng-click="$ctrl.openPage('previous')">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <li ng-repeat="page in $ctrl.pages" ng-class="{active: page.index == $ctrl.page.current}">
+                    <a ng-click="$ctrl.openPage(page.index)">{{page.number}}</a>
+                </li>
+                <li ng-class="{disabled: $ctrl.page.current == $ctrl.page.total - 1}">
+                    <a aria-label="Next" ng-click="$ctrl.openPage('next')">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>

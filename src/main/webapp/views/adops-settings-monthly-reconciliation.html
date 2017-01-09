@@ -1,0 +1,94 @@
+<div class="row">
+    <div class="col-lg-12">
+
+        <ul class="breadcrumb no-margin no-header text-asbestos">
+            <li><h3 class="page-header-nomargin text-asbestos">Ad Ops</h3></li>
+            <li><h3 class="page-header-nomargin text-asbestos">Monthly Reconciliation</h3></li>
+        </ul>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+
+        <div class="panel panel-default" ng-if="monthlyAdvertiserData.length > 0">
+
+            <div class="panel-heading">
+
+                <div class="pull-left">
+                    <select ng-model="selectedMonth" ng-options="availableMonth.label for availableMonth in availableMonths" ng-change="refreshData(selectedMonth)"></select>
+                </div>
+
+                <div class="btn-group pull-right" data-toggle="buttons">
+                    <label class="btn btn-primary active">
+                        <input type="radio" name="options" id="option1" autocomplete="off" checked> Monthly
+                    </label>
+                    <label class="btn btn-primary">
+                        <input type="radio" name="options" id="option2" autocomplete="off"> Advertiser
+                    </label>
+                </div>
+
+                <div class="clearfix"></div>
+            </div>
+
+            <table class="table table-bordered">
+                <thead>
+                    <tr><th>Advertiser</th><th>Platform Impressions</th><th>Platform Revenue</th><th>Advertiser Impressions</th><th>Advertiser Revenue</th><th>Shown/Hidden</th></tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="row in monthlyAdvertiserData | orderBy:'advertiser_name'">
+                    <td>{{row.advertiser_name}}</td>
+                    <td>{{row.platform_impressions|number}}</td>
+                    <td>${{row.platform_revenue|number: 2}}</td>
+                    <td><span ng-inline-edit model="row.advertiser_impressions" type="number"></span></td>
+                    <td><span ng-inline-edit model="row.advertiser_revenue" type="money"></span></td>
+                    <td>
+                        <input id="cmn-toggle-{{$index}}" class="cmn-toggle cmn-toggle-round" data-target="#hidden-{{$index}}" type="checkbox" ng-model="row.is_hidden" ng-change="row.is_hidden">
+                        <label for="cmn-toggle-{{$index}}"></label>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <div class="panel-footer" style="text-align: right">
+                <button class="btn btn-primary" ng-click="preview()">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    </div>
+</div>
+
+<div class="modal fade modal-wide modal-scrollable" id="previewResultsModal" tabindex="-1" role="dialog" aria-labelledby="previewResultsModalLabel" aria-hidden="true" ng-show-modal="isPreviewing" close="onPreviewClose()">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="previewResultsModalLabel">Monthly Reconciliation Preview Results</h4>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr><th>Date</th><th>Advertiser</th><th>Line Item Name</th><th>Platform Impressions</th><th>Platform Revenue</th><th>Advertiser Impressions</th><th>Advertiser Revenue</th><th>Is Data Hidden</th></tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="row in previewResults | orderBy:'advertiser_name'">
+                        <td>{{row.date}}</td>
+                        <td>{{row.demand_partner_name}}</td>
+                        <td>{{row.line_item_name}}</td>
+                        <td>{{row.platform_impressions|number}}</td>
+                        <td>${{row.platform_revenue|number: 2}}</td>
+                        <td><span ng-if="row.advertiser_impressions != null">{{row.advertiser_impressions|number}}</span></td>
+                        <td><span ng-if="row.advertiser_revenue != null">${{row.advertiser_revenue|number: 2}}</span></td>
+                        <td><span ng-if="row.is_hidden">Yes</span><span ng-if="!row.is_hidden">No</span></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" ng-click="save()">Save Changes</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,16 @@
+ALTER TABLE adconfig_inpage ADD COLUMN video_width SMALLINT NULL;
+ALTER TABLE adconfig_inpage ADD COLUMN video_height SMALLINT NULL;
+ALTER TABLE adconfig_inpage ADD COLUMN display_width SMALLINT NULL;
+ALTER TABLE adconfig_inpage ADD COLUMN display_height SMALLINT NULL;
+ALTER TABLE adconfig_inpage DROP COLUMN width;
+ALTER TABLE adconfig_inpage DROP COLUMN height;
+ALTER TABLE adconfig_inpage ADD COLUMN freq_cap_enabled BIT(1) NOT NULL DEFAULT false;
+ALTER TABLE adconfig_inpage ADD COLUMN freq_cap_num SMALLINT NULL;
+ALTER TABLE adconfig_inpage ADD COLUMN combined_url VARCHAR(2083) NULL;
+ALTER TABLE adconfig_inpage ADD COLUMN backup_display_url VARCHAR(2083) NULL;
+ALTER TABLE adconfig_inpage ADD COLUMN backup_video_url VARCHAR(2083) NULL;
+ALTER TABLE adconfig_inpage ADD COLUMN mobile_728_url VARCHAR(2083) NULL;
+ALTER TABLE adconfig_inpage ADD COLUMN mobile_320_url VARCHAR(2083) NULL;
+ALTER TABLE adconfig_inpage DROP COLUMN display_url;
+ALTER TABLE adconfig_inpage DROP COLUMN video_url;
+ALTER TABLE adconfig_inpage DROP COLUMN audio_url;

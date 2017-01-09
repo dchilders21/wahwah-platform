@@ -1,0 +1,30 @@
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="col-lg-12 line-items">
+            <div class="row">
+                <button role="button" class="btn btn-primary" ng-click="$ctrl.createLineItem()">Create New Line Item</button>
+            </div>
+            <br>
+
+            <div class="row accordion">
+                <accordion list-items="$ctrl.lineItemsToShow" list-item-name="name" on-list-item-select="$ctrl.onLineItemEdit(item)" on-list-item-delete="$ctrl.onLineItemDelete(item)"
+                           header-template-url="/components/DemandSource/demand-source-creative-line-item-header.html"
+                            item-template-url="/components/DemandSource/demand-source-creative-line-item-ad.html"></accordion>
+            </div>
+        </div>
+    </div>
+</div>
+
+<modal-dialog wide visible="$ctrl.selectedLineItem != null" on-close="$ctrl.closeLineItem()">
+    <modal-title>{{$ctrl.selectedLineItem.name}}</modal-title>
+    <modal-body>
+        <demand-source-line-item-dialog line-item="$ctrl.selectedLineItem" creatives="$ctrl.demandSourceCreatives"></demand-source-line-item-dialog>
+    </modal-body>
+    <modal-footer>
+        <button type="button" class="btn btn-danger" ng-click="$ctrl.closeLineItem()">Cancel</button>
+        <button type="button" class="btn btn-primary" ng-click="$ctrl.applyLineItem()">Apply</button>
+    </modal-footer>
+</modal-dialog>
+
+
+

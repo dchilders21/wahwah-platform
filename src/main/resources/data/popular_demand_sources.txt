@@ -1,0 +1,34 @@
+495 Communications,ADFORGEINC,{"instance_url":"http://495.as.adforgeinc.com/"}
+Allscreen,ALLSCREEN
+Altitude Digital,ALTITUDE_DIGITAL
+Criteo,CRITEO
+Facebook Audience Network,FB_AUDIENCE_NETWORK
+Index Exchange,INDEX_EXCHANGE
+LiveRail,LIVERAIL_API
+Monarch Ads,MONARCH_ADS
+One by AOL: Video,AOL_ONE_VIDEO
+Red Panda Marketplace,RED_PANDA_MARKETPLACE
+SpringServe,SPRINGSERVE
+Teads Managed,TEADS_MANAGED
+Tremor,TREMOR_MEDIA
+Virool,VIROOL
+Google AdSense,GOOGLE_ADSENSE
+Doubleclick Ad Exchange,GOOGLE_ADX
+Pulsepoint,PULSEPOINT
+Pubmatic,PUBMATIC
+Rubicon Project,RUBICON_PROJECT
+Undertone,UNDERTONE
+Mopub,OTHER
+Casale,OTHER
+Opera,OTHER
+Yume,OTHER
+Brightroll,OTHER
+TubeMogul,OTHER
+Mediabong,OTHER
+Zedo,OTHER
+NovoRoll,OTHER
+AnswerMedia,OTHER
+Sharethrough,OTHER
+AppNexus,OTHER
+Break Media,OTHER
+CPXi,OTHER

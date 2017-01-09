@@ -1,0 +1,2 @@
+ALTER TABLE accounts ADD COLUMN external_id VARCHAR(255);
+ALTER TABLE accounts ADD COLUMN adserver_type VARCHAR(255) DEFAULT "OPEN_X";

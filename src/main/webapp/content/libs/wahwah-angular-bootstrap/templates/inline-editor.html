@@ -1,0 +1,11 @@
+<span ng-form name="form.inlineEditorForm">
+    <span ng-if="!isEditable" class="inline-editor-text" ng-dblclick="setEditable(true)" ng-tooltip data-original-title="Double click to edit inline">
+        <span ng-if="!model">Nothing Yet</span>
+        <span ng-if="type == 'number' && model">{{model|number}}</span>
+        <span ng-if="type == 'money' && model">${{model|number: 2}}</span>
+        <span ng-if="type == 'text' && model">{{model}}</span>
+    </span>
+   <span ng-if="isEditable">
+        <input type="{{fieldType}}" ng-model="data.modelShadowValue" name="inlineEditorField" ng-blur="saveValue()" ng-enter="saveValue()" autofocus>
+    </span>
+</span>

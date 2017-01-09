@@ -1,0 +1,1 @@
+DELETE FROM oauth_grants;

@@ -1,0 +1,19 @@
+var widgetID = $config.id;
+
+/*
+-- Generated Using: Red Panda Platform $config.platformVersion (revision: $config.platformCommitId) --
+
+[Product Name: {{ $config.productName }} ]
+[Site Name: {{ $config.siteName }} ]
+[Product id: {{ $config.productId }} ]
+[Widget id: {{ $config.id }} ]
+
+Published on:  $config.publishDate EST
+*/
+
+var redpanda_tag_random = (new Date().getTime());
+var redpanda_tag_contents = $config.nativeTagContents;
+
+redpanda_tag_contents = redpanda_tag_contents.replace("INSERT_RANDOM_NUMBER_HERE",redpanda_tag_random);
+
+document.write(redpanda_tag_contents);

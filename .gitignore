@@ -1,0 +1,10 @@
+.idea/
+target/
+.classpath
+.settings
+.project
+WahwahDashboard.iml
+.gradle/
+*.iml
+build/
+out

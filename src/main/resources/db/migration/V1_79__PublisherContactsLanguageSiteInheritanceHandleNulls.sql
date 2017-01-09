@@ -1,0 +1,1 @@
+UPDATE sites AS s INNER JOIN accounts AS a ON s.account_id = a.id SET s.inherit_pub_details = TRUE WHERE NULL = s.contact_email IS NULL AND s.contact_name IS NULL AND a.country<=>s.site_country AND a.language<=>s.site_language;

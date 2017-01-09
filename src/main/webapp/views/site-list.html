@@ -1,0 +1,121 @@
+<!-- START site-list -->
+<div class="row same-height-row">
+        <div class="col-lg-8 same-height-col">
+
+            <ul class="breadcrumb text-asbestos no-margin no-padding" style="padding: 0 !important; margin: 0 !important" ng-if="publisherId != null">
+                <li ng-if="hasRole('NETWORK_ADMIN') && parentNetwork != null"><h3 class="page-header-nomargin text-asbestos" ><a href="#/network-{{parentNetwork.id}}/publishers/">{{parentNetwork.name}}</a></h3></li>
+                <li ng-if="hasRole('NETWORK_ADMIN') && parentNetwork == null"><h3 class="page-header-nomargin text-asbestos" ><a href="#/publishers">Red Panda Marketplace</a></h3></li>
+                <li ng-if="publisherName != null"><h3 class="page-header-nomargin text-asbestos" >{{ publisherName }}</h3></li>
+                <li><h3 class="page-header-nomargin text-asbestos" >Sites</h3></li>
+            </ul>
+
+             <ul class="breadcrumb text-asbestos  no-margin no-padding" ng-if="publisherId == null">
+                 <li ng-if="hasRole('NETWORK_ADMIN') && !options.seeAll"><h3 class="page-header-nomargin text-asbestos"><a href="#/publishers">Red Panda Marketplace</a></h3></li>
+                 <li ng-if="hasRole('NETWORK_ADMIN')"><h3 class="page-header-nomargin text-asbestos"><a href="#/publishers">All Publishers</a></h3></li>
+                 <li ><h3 class="page-header-nomargin text-asbestos">All Sites</h3></li>
+            </ul>
+        </div>
+        <div class="col-lg-4 same-height-col" style="text-align: right; vertical-align: bottom">
+            <div >
+                <a class="action-icon" href="#/publishers/{{publisherId}}" ng-if="publisherId != null && hasRole('PUBLISHER_ADMIN')" title="Edit publisher"><i class="fa fa-2x fa-edit"></i></a>
+
+                <!-- Don't allow download of all sites' tags since it takes way too long -->
+                <a ng-if="publisherId != null && publisher.site_count > 0 && !publisher.is_archived" class="action-icon" href="{{getPublisherAllTagDownloadUrl(publisherId)}}" target="_blank" download title="Download all tags"><i class="fa fa-2x fa-download"></i></a>
+                <a ng-if="publisherId != null && publisher.site_count > 0 && !publisher.is_archived" class="action-icon" href="{{getPublisherUniversalPublisherTagDownloadUrl(publisherId)}}" target="_blank" download title="Download universal publisher tag"><i class="fa fa-2x fa-cloud-download"></i></a>
+            </div>
+        </div>
+</div>
+
+<br/>
+
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="alert alert-warning" ng-if="showConfirmDeleteAlert">
+            <button type="button" class="close" ng-click="hideDeleteWarning()">&times;</button>
+            <strong>Warning!</strong> The site <em>{{siteToDelete.site_name}}</em> will be deleted permanently and cannot be recovered. <a ng-click="performDelete()" class="alert-link">Confirm Deletion</a>&nbsp;<i ng-show="showCog" class="fa fa-1x fa-cog fa-spin"></i>
+        </div>
+        <div class="alert alert-danger" ng-if="showError"><strong>Error</strong> {{errorMsg}}</div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-lg-8">
+        <a class="btn btn-primary top-btn" ng-if="hasRole('PUBLISHER_ADMIN') && publisherId != null && publisher.redpanda_publisher_creator_id == null" href="#/sites/create/publisher-{{publisherId}}/">Create New Site</a>
+        <a class="btn btn-primary" ng-if="hasRole('PUBLISHER_ADMIN') && publisherId == null && publisher.redpanda_publisher_creator_id == null" href="#/sites/create">Create New Site</a>
+        <div ng-if="user.accountType == 'ROOT' && publisher.redpanda_publisher_creator_id != null">Sites were created through linked <a href="#/publisher-{{publisher.redpanda_publisher_creator_id}}/sites/">Red Panda Publisher # {{publisher.redpanda_publisher_creator_id}}</a></div>
+        <div ng-if="user.accountType == 'ROOT' && publisher.marketplace_publisher_id != null">Linked <a href="#/publisher-{{publisher.marketplace_publisher_id}}/sites/">Marketplace Publisher # {{publisher.marketplace_publisher_id}}</a></div>
+    </div>
+    <div class="col-lg-4">
+        <div ng-if="network.id == null && publisherId == null" class="form-group" style="text-align: right">
+            <label for="see-all" >See all</label>
+            <input type="checkbox" ng-model="options.seeAll" id="see-all" ng-change="changeSeeAll()"/>
+        </div>
+    </div>
+</div>
+
+<div class="row" ng-if="sites.length == 0">
+    <br/>
+    No sites created yet
+    </div>
+
+<div class="row" ng-if="sites.length > 0">
+    <div class="col-lg-12">
+
+        <div class="panel panel-default">
+            <table class="table table-striped table-grid">
+                <colgroup>
+                    <col span="1" style="width: 30%;">
+                    <col span="1" style="max-width: 150px;">
+                    <col span="1">
+                    <col span="1">
+                </colgroup>
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>URL</th>
+                    <th ng-if="hasRole('INTERNAL_USER')">Publisher</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="site in sites | filter: {is_default:false}">
+                        <td ng-click="selectSite(site)" class="truncate_siteNames">{{site.site_name}}</td>
+                        <td ng-click="selectSite(site)" class="truncate"><a href="{{site.site_url}}" ng-click="$event.stopPropagation();" target="_blank">{{site.site_url}}</a></td>
+                        <td ng-click="selectSite(site)" class="truncate_pubNames" ng-if="hasRole('INTERNAL_USER')">{{site.account_name}}</td>
+                        <td class="actions actions-4" ng-if="hasRole('PUBLISHER_ADMIN')">
+                            <a class="action-icon" ng-if="!site.is_archived" ng-href="{{ getTagDownloadUrl(site) }}" target="_blank" download><i class="fa fa-2x fa-download"></i></a>
+                            <a class="action-icon" ng-if="!site.is_archived" href="{{getUniversalSiteTagDownloadUrl(site.id)}}" target="_blank" download title="Download universal site tag"><i class="fa fa-2x fa-cloud-download"></i></a>
+                            <a class="action-icon" href="#/sites/{{site.id}}"><i class="fa fa-2x fa-edit"></i></a>
+                            <a class="action-icon" ng-click="deleteSite(site)" ng-if="site.redpanda_linked_site_id == null"><i class="fa fa-2x fa-times"></i></a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="row" ng-if="sites.length > 0">
+    <div class="col-lg-12 text-center">
+        <nav>
+            <ul class="pagination">
+                <li ng-class="{disabled: page.current == 0}">
+                    <a aria-label="Previous" ng-click="openPage('previous')">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <li ng-repeat="page in pages" ng-class="{active: page.index == $parent.page.current}">
+                    <a ng-click="openPage(page.index)">{{page.number}}</a>
+                </li>
+                <li ng-class="{disabled: page.current == page.total - 1}">
+                    <a aria-label="Next" ng-click="openPage('next')">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+<!-- END site-list -->

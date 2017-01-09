@@ -1,0 +1,1 @@
+ALTER TABLE accounts ADD COLUMN ox_network_id VARCHAR(255);

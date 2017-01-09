@@ -1,0 +1,17 @@
+INSERT INTO audit_action_types (name,value) VALUES ('Publisher Saved','PUBLISHER_SAVE');
+INSERT INTO audit_action_types (name,value) VALUES ('Network Saved','NETWORK_SAVE');
+INSERT INTO audit_action_types (name,value) VALUES ('Site Saved','SITE_SAVE');
+INSERT INTO audit_action_types (name,value) VALUES ('Publisher Archived','PUBLISHER_ARCHIVE');
+INSERT INTO audit_action_types (name,value) VALUES ('Network Archived','NETWORK_ARCHIVE');
+INSERT INTO audit_action_types (name,value) VALUES ('Site Archived','SITE_ARCHIVE');
+INSERT INTO audit_action_types (name,value) VALUES ('Product Archived','PRODUCT_ARCHIVE');
+INSERT INTO audit_action_types (name,value) VALUES ('Publisher Deleted','PUBLISHER_DELETE');
+INSERT INTO audit_action_types (name,value) VALUES ('Network Deleted','NETWORK_DELETE');
+INSERT INTO audit_action_types (name,value) VALUES ('Site Deleted','SITE_DELETE');
+INSERT INTO audit_action_types (name,value) VALUES ('Product Deleted','PRODUCT_DELETE');
+INSERT INTO audit_action_types (name,value) VALUES ('User Activated','USER_ACTIVATED');
+INSERT INTO audit_action_types (name,value) VALUES ('User Disabled','USER_DISABLE');
+INSERT INTO audit_action_types (name,value) VALUES ('User Deleted','USER_DELETE');
+UPDATE audit_action_types SET value='PUBLISHER_CREATE' WHERE value='PUBLISHER_CREATED';
+UPDATE audit_action_types SET value='NETWORK_CREATE' WHERE value='NETWORK_CREATED';
+UPDATE audit_action_types SET value='SITE_CREATE' WHERE value='SITE_CREATED';

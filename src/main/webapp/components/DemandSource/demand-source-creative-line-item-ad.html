@@ -1,0 +1,13 @@
+<!-- WARNING: item.$$creative_name will not be serialized into JSON for output -->
+
+    <table class="table-striped" ng-if="listItem.ads.length > 0">
+        <tr ng-repeat="item in listItem.ads" ><td>
+            <p class="title-description">Ad: <span class="description"> {{item.name}}</span></p>
+            <p ng-if="item.$$creative_name" class="title-description">Creative:<span class="description"> {{item.$$creative_name}}</span></p>
+            <p ng-if="!item.$$creative_name" class="title-description"><span class="description">No creative for ad {{item.name}}</span></p>
+        </td></tr>
+    </table>
+
+<table class="table-striped" ng-if="listItem.ads.length == 0">
+        <tr><td><p class="title-description"><span class="description">No ads yet.</span></p></td></tr>
+</table>

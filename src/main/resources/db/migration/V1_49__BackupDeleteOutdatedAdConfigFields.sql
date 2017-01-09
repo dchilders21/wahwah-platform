@@ -1,0 +1,2 @@
+CREATE TABLE __tmp_adconfig_adurl_backup_deleteme AS SELECT id,product_id,video_width,video_height,display_width,display_height,combined_url,backup_display_url,backup_video_url,mobile_728_url,mobile_320_url,leave_behind_url FROM adconfig_inpage;
+ALTER TABLE adconfig_inpage DROP COLUMN combined_url, DROP COLUMN backup_display_url, DROP COLUMN backup_video_url, DROP COLUMN mobile_728_url, DROP COLUMN mobile_320_url, DROP COLUMN leave_behind_url, DROP COLUMN video_width, DROP COLUMN video_height, DROP COLUMN display_width, DROP COLUMN display_height;

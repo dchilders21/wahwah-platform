@@ -1,0 +1,2 @@
+ALTER TABLE sites ADD COLUMN liverail_id VARCHAR(255) NOT NULL;
+ALTER TABLE accounts ADD COLUMN liverail_sitelist_id VARCHAR(255) NOT NULL;

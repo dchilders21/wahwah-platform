@@ -1,0 +1,77 @@
+<div class="row">
+    <div class="col-lg-12">
+        <h3 class="page-header-nomargin text-asbestos">Create User</h3>
+    </div>
+</div>
+
+<div class="row" ng-if="showError">
+        <div class="alert alert-danger"><strong>{{errMsg}}</div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Personal Information</h3>
+            </div>
+            <div class="panel-body">
+                <form role="form" class="form" name="profileForm">
+                    <div class="form-group">
+                        <label for="firstName" class="control-label">First Name</label>
+                        <input type="text" class="form-control" id="firstName" placeholder="Enter First Name" ng-model="editUser.firstName">
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName" class="control-label">Last Name</label>
+                        <input type="text" class="form-control" id="lastName" placeholder="Enter Last Name" ng-model="editUser.lastName">
+                    </div>
+                    <div class="form-group">
+                        <label for="emailAddress" class="control-label">Email Address</label>
+                        <input type="email" class="form-control" id="emailAddress" placeholder="Enter Email Address" ng-model="editUser.emailAddress">
+                    </div>
+                    <div class="form-group has-feedback" ng-if="shouldShowPublisherField()" ng-class="{'has-error': publisherNameInvalid}">
+                        <!-- Todo: Figure out how we're going to filter Account in the UI. Should we have "Publisher Analytics" and "Network Analytics" and filter the Accounts UI accordingly (even changing the title) -->
+                        <label for="publisherName" class="control-label">Account</label>
+                        <input type="text" class="form-control" id="publisherName" placeholder="Enter Publisher Name" ng-model="editUser.accountName" ng-typeahead url="{{publisherQuery}}" filter="onPublisherFilter(parsedResponse)">
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">User Type</h3>
+            </div>
+
+            <div class="panel-body">
+                <form role="form" class="form">
+                    <!-- <div class="checkbox" ng-repeat="role in roles">
+                        <label>
+                            <input type="checkbox" ng-model="roleSelections[role]"> {{displayRole(role)}}
+                        </label>
+                    </div> -->
+                    <div class="radio" ng-repeat="userType in userTypes" ng-show="shouldShowUserType(userType)">
+                        <div >
+                            <input type="radio" name="userTypes" ng-model="editUser.selectedUserType" ng-value="userType" ng-click="onClickUserType()" /><label> {{ displayUser(userType )}}</label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <form role="form" class="form">
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" ng-click="createUser()">Create User</button>
+            </div>
+        </form>
+    </div>
+</div>

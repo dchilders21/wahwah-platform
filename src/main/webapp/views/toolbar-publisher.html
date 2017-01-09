@@ -1,0 +1,149 @@
+<div class="row">
+    <div class="col-lg-12">
+
+        <ul class="breadcrumb no-margin no-padding  text-asbestos">
+            <li><h3 class="page-header-nomargin text-asbestos"><a href="#/admin">Admin Options</a></h3></li>
+            <li><h3 class="page-header-nomargin text-asbestos">Toolbar Publisher</li>
+        </ul>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+
+        <div id="testCredentialsPanel" class="panel panel-default" ng-if="didGitCredentialsWork && didEdgeCastCredentialsWork && currentStep == 'test-credentials'">
+            <div class="panel-heading">
+                <h3 class="panel-title">Testing Git &amp; EdgeCast Credentials</h3>
+            </div>
+            <div class="panel-body">
+                <p>Please wait while we test your saved Git &amp; EdgeCast credentials</p>
+            </div>
+        </div>
+
+        <div id="credentialsPanel" class="panel panel-danger" ng-if="!didGitCredentialsWork || !didEdgeCastCredentialsWork">
+            <div class="panel-heading">
+                <h3 class="panel-title">Git &amp; EdgeCast Credentials Needed</h3>
+            </div>
+            <div class="panel-body">
+                <p>Please provide your Git and EdgeCast credentials:</p>
+
+                <form role="form" class="form-horizontal">
+                    <div class="form-group has-feedback" ng-class="{'has-success': didGitCredentialsWork && hasTestedCredentials, 'has-error': !didGitCredentialsWork && hasTestedCredentials}">
+                        <label for="gitUsername" class="col-sm-2 control-label">Git Username</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="gitUsername" placeholder="Enter Git Username" ng-model="credentials.gitUsername">
+                            <span class="fa fa-check form-control-feedback" ng-if="didGitCredentialsWork && hasTestedCredentials"></span>
+                            <span class="fa fa-times form-control-feedback" ng-if="!didGitCredentialsWork && hasTestedCredentials"></span>
+                        </div>
+                    </div>
+                    <div class="form-group has-feedback" ng-class="{'has-success': didGitCredentialsWork && hasTestedCredentials, 'has-error': !didGitCredentialsWork && hasTestedCredentials}">
+                        <label for="gitPassword" class="col-sm-2 control-label">Git Password</label>
+                        <div class="col-sm-10">
+                            <input type="password" class="form-control" id="gitPassword" placeholder="Enter Git Password" ng-model="credentials.gitPassword"/>
+                            <span class="fa fa-check form-control-feedback" ng-if="didGitCredentialsWork && hasTestedCredentials"></span>
+                            <span class="fa fa-times form-control-feedback" ng-if="!didGitCredentialsWork && hasTestedCredentials"></span>
+                        </div>
+                    </div>
+                    <div class="form-group has-feedback" ng-class="{'has-success': didEdgeCastCredentialsWork && hasTestedCredentials, 'has-error': !didEdgeCastCredentialsWork && hasTestedCredentials}">
+                        <label for="ecUsername" class="col-sm-2 control-label">EdgeCast Username</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="ecUsername" placeholder="Enter EdgeCast Username" ng-model="credentials.ecUsername"/>
+                            <span class="fa fa-check form-control-feedback" ng-if="didEdgeCastCredentialsWork && hasTestedCredentials"></span>
+                            <span class="fa fa-times form-control-feedback" ng-if="!didEdgeCastCredentialsWork && hasTestedCredentials"></span>
+                        </div>
+                    </div>
+                    <div class="form-group has-feedback" ng-class="{'has-success': didEdgeCastCredentialsWork && hasTestedCredentials, 'has-error': !didEdgeCastCredentialsWork && hasTestedCredentials}">
+                        <label for="ecPassword" class="col-sm-2 control-label">EdgeCast Password</label>
+                        <div class="col-sm-10">
+                            <input type="password" class="form-control" id="ecPassword" placeholder="Enter EdgeCast Password" ng-model="credentials.ecPassword"/>
+                            <span class="fa fa-check form-control-feedback" ng-if="didEdgeCastCredentialsWork && hasTestedCredentials"></span>
+                            <span class="fa fa-times form-control-feedback" ng-if="!didEdgeCastCredentialsWork && hasTestedCredentials"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button type="button" class="btn btn-default" ng-click="testCredentials()">Test Credentials</button>
+                            <button type="button" class="btn btn-primary pull-right" ng-click="saveCredentials()">Save</button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+        <div id="listGitBranches" class="panel panel-default" ng-if="currentStep == 'list-git-branches'">
+            <div class="panel-heading">
+                <h3 class="panel-title">Choose Git Branch</h3>
+            </div>
+            <div class="panel-body">
+                <p>Select a branch to publish to EdgeCast</p>
+
+                <form role="form">
+                    <div class="form-group">
+                        <label for="gitBranches">Git Branch</label>
+                        <select id="gitBranches" ng-model="$parent.selectedGitBranch" ng-disabled="!hasLoadedGitBranches" ng-options="gitBranch for gitBranch in gitBranches" required="true"></select>
+                    </div>
+                    <div class="form-group">
+                        <button type="button" class="btn btn-primary pull-right" ng-click="selectGitBranch()" ng-if="hasLoadedGitBranches">Select Branch</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div id="chooseDestination" class="panel panel-default" ng-if="currentStep == 'choose-destination'">
+            <div class="panel-heading">
+                <h3 class="panel-title">Choose Publish Destination</h3>
+            </div>
+            <div class="panel-body">
+                <p>Select which EdgeCast destination you wish to publish to:</p>
+
+                <form role="form">
+                    <div class="form-group">
+                        <label for="destinations">Destination</label>
+                        <select id="destinations" ng-model="$parent.selectedDestination" ng-options="destination.name for destination in destinations" required="true"></select>
+                    </div>
+                    <div class="form-group">
+                        <button type="button" class="btn btn-primary pull-right" ng-click="selectDestination()">Select Destination</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div id="uploadMonitor" class="panel panel-default" ng-if="currentStep =='upload-monitor'">
+            <div class="panel-heading">
+                <h3 class="panel-title">Monitor Upload Progress</h3>
+            </div>
+            <div class="panel-body">
+                <p>Upload is in progress. Do not close this page until upload is complete.</p>
+
+                <div class="progress progress-striped active">
+                    <div class="progress-bar" role="progressbar" aria-valuenow="{{fileUploadCounter}}" aria-valuemin="0" aria-valuemax="{{filesToUpload.length}}" ng-style="fileUploadProgressStyle"></div>
+                    <span class="sr-only">{{fileUploadPercentage}}% Complete</span>
+                </div>
+
+                <div id="uploadFileList">
+                    <div ng-repeat="file in filesToUpload" class="well well-sm">
+                        <span class="fa fa-clock-o" ng-if="file.status == 'Pending'"></span>
+                        <span class="fa fa-upload" ng-if="file.status == 'Upload'"></span>
+                        <span class="fa fa-check" ng-if="file.status == 'Complete'"></span>
+                        {{file.name}}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="uploadComplete" class="panel panel-default" ng-if="currentStep == 'upload-done'">
+            <div class="panel-heading">
+                <h3 class="panel-title">Upload Complete</h3>
+            </div>
+            <div class="panel-body">
+                <div ng-if="filesToUpload.length > 0"><p>Upload Finished.</p></div>
+                <div ng-if="filesToUpload.length == 0"><p>Nothing to do since nothing has changed since last upload. Try again in 5-10 minutes if you have just made changes.</p>
+                    <div>
+                        <button type="button" class="btn btn-primary pull-right" ng-click="forceUploadAll()">Force upload all</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

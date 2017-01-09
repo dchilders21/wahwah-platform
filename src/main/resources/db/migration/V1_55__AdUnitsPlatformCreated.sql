@@ -1,0 +1,1 @@
+ALTER TABLE ad_units ADD COLUMN platform_created TINYINT(1) NOT NULL DEFAULT 1;

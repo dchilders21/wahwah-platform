@@ -1,0 +1,1 @@
+ALTER TABLE creatives ADD COLUMN vendor_type VARCHAR(255) NULL;

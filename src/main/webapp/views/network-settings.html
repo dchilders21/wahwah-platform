@@ -1,0 +1,135 @@
+<div class="row">
+	<div class="col-lg-8">
+
+		<ul class="breadcrumb page-header text-asbestos no-margin no-padding">
+			<li ><h3 class="page-header-nomargin text-asbestos"><a href="#/networks">Networks</a></h3></li>
+			<li ng-if="!isNewNetwork()"><h3 class="page-header-nomargin text-asbestos" >  <a href="#/network-{{currentNetwork.id }}/publishers/"> {{currentNetwork.name }} ({{currentNetwork.id }})</a></h3></li>
+			<li ng-if="!isNewNetwork()"><h3 class="page-header-nomargin text-asbestos" >Network Settings</h3></li>
+		</ul>
+	</div>
+</div>
+
+
+<div class="alert alert-danger" ng-if="showSaveError"><strong>Error</strong> There was an error when saving the network: {{errorMsg}}</div>
+
+<div class="alert alert-success" ng-if="showSaveSuccess"><strong>Network Saved</strong> The network has been saved with the updated information.</div>
+
+<ng-tabs tabs="$ctrl.tabs" selected-tab="$ctrl.currentTab" tab-label="name" tab-select="$ctrl.setCurrentTab(tab)"></ng-tabs>
+
+<div class="panel panel-default" ng-if="$ctrl.currentTab.id == 'network-info'">
+	<div class="panel-body">
+		<form name="$ctrl.networkForm" role="form" class="form-horizontal">
+
+			<div class="form-group">
+				<label for="network-name" class="col-sm-2 control-label">Network Name</label>
+				<div class="col-sm-10" ng-class="{'has-error': $ctrl.networkForm.networkName.$invalid}">
+					<input type="text" class="form-control" name="networkName" placeholder="Enter Network Name"
+						ng-model="currentNetwork.name" required id="network-name" />
+				</div>
+			</div>
+
+			<div class="form-group" ng-if="!isNewNetwork()">
+				<label for="contact-name" class="col-sm-2 control-label">Contact Name</label>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" name="contactName" placeholder="Enter Contact Name" ng-model="currentNetwork.contact_name" id="contact-name" />
+				</div>
+			</div>
+
+			<div class="form-group" ng-if="!isNewNetwork()">
+				<label for="contact-email" class="col-sm-2 control-label">Contact Email</label>
+				<div class="col-sm-10" ng-class="{'has-error': $ctrl.networkForm.contactEmail.$invalid}">
+					<input type="email" class="form-control" name="contactEmail" placeholder="Enter Contact Email" ng-model="currentNetwork.contact_email" /> <span class="help-block" ng-show="$ctrl.networkForm.contactEmail.$error.email" id="contact-email">Please enter a valid email</span>
+				</div>
+			</div>
+
+
+			<div class="form-group">
+				<label for="country" class="col-sm-2 control-label">Country</label>
+				<div class="col-sm-4" ng-class="{'has-error': $ctrl.networkForm.country.$invalid}">
+					<select class="form-control" name="country" ng-model="currentNetwork.country"
+							ng-options="country.id as country.name for country in countries" required id="country"/>
+				</div>
+			</div>
+
+			<div class="form-group">
+                <label for="language" class="col-sm-2 control-label">Language</label>
+                <div class="col-sm-4" ng-class="{'has-error': $ctrl.networkForm.language.$invalid}">
+                    <select class="form-control" name="siteLanguage" ng-model="currentNetwork.language"
+                            ng-options="language.id as language.name for language in languages"  id="language"/>
+                </div>
+            </div>
+
+
+			<div class="form-group" ng-if="!isNewNetwork()">
+				<label for="defaultFormat" class="col-sm-2 control-label">Default Format</label>
+				<div class="col-sm-4" ng-class="{'has-error': $ctrl.networkForm.defaultFormat.$invalid}">
+					<select class="form-control" name="defaultFormat" ng-model="currentNetwork.default_product_format"
+							ng-options="format.type as format.description for format in allowedFormats"  id="defaultFormat"/>
+				</div>
+			</div>
+
+			<div class="form-group" ng-if="!isNewNetwork()">
+				<label for="display_passback" class="col-sm-2 control-label">Provide Passback HTML</label>
+				<input type="checkbox" id="display_passback" ng-model="$ctrl.isDisplayPassback">
+			</div>
+
+			<div class="form-group" ng-if="!isNewNetwork() && $ctrl.isDisplayPassback">
+				<label for="create-tag-contents-html" class="col-sm-2 control-label">Passback Display HTML</label>
+				<div class="col-sm-10">
+					<textarea class="form-control" id="create-tag-contents-html" placeholder="Enter HTML for passback" ng-model="currentNetwork.passback_display_tag_html"></textarea>
+				</div>
+			</div>
+
+			<div class="form-group" ng-if="currentNetwork.publisher_count <= 1 && currentNetwork.default_publisher_id == null">
+				<label for="single-publisher" class="col-sm-2 control-label">Single Publisher Mode</label>
+				<div class="col-sm-10">
+					<input type="checkbox" name="singlePublisherMode" ng-model="currentNetwork.is_single_publisher" id="single-publisher">
+                    (<span ng-if="!currentNetwork.is_single_publisher">Will Be: </span> {{currentNetwork.single_publisher_name}} - ID: {{currentNetwork.single_publisher_id}})
+				</div>
+			</div>
+
+			<div class="form-group" ng-if="!isNewNetwork()">
+                <label for="NetworkNotes" class="col-sm-2 control-label">Network Notes</label>
+                <div class="col-sm-10">
+                    <textarea class="form-control" id="NetworkNotes" placeholder="Important notes about site, visible to all users!" ng-model="currentNetwork.account_notes" ></textarea>
+                    <div ng-if="hasRole('INTERNAL_USER')"><i>Warning: Networks can see this note.</i></div>
+                </div>
+            </div>
+
+
+            <div class="form-group" ng-if="hasRole('INTERNAL_USER') && !isNewNetwork()">
+                <label for="InternalNotes" class="col-sm-2 control-label">Red Panda Internal Notes</label>
+                <div class="col-sm-10">
+                    <textarea class="form-control" id="InternalNotes" placeholder="Internal-only notes here, visible to internal-users only" ng-model="currentNetwork.internal_notes" ></textarea>
+                </div>
+            </div>
+
+			<revenue-model-editor billable-object="currentNetwork" entity-type="network" entity-id="currentNetwork.id"></revenue-model-editor>
+
+    		<div class="form-group">
+				<div class="col-sm-offset-2 col-sm-10">
+					<button type="button" class="btn btn-primary" ng-click="updateNetwork()"
+						ng-disabled="disableSubmit || !$ctrl.networkForm.$valid || isNewNetwork()" ng-show="!isNewNetwork()">
+						<span ng-show="!disableSubmit">Update Network</span>
+						<span ng-hide="!disableSubmit"><i class="fa fa-1x fa-cog fa-spin"></i> Updating Network</span>
+
+					</button>
+					<button type="button" class="btn btn-default" ng-click="createNetwork()" ng-disabled="disableSubmit || !$ctrl.networkForm.$valid" ng-show="isNewNetwork(currentNetwork.id)">
+						<span ng-show="!disableSubmit">Create New Network</span>
+						<span ng-hide="!disableSubmit"><i class="fa fa-1x fa-cog fa-spin"></i> Creating Network</span>
+					</button>
+				</div>
+			</div>
+
+
+		</form>
+	</div>
+</div>
+
+<div class="panel panel-default" ng-if="$ctrl.currentTab.id == 'financial-info'">
+    <div class="panel-body">
+        <form role="form" class="form-horizontal">
+            <revenue-model-panel entity-type="network" entity-id="currentNetwork.id"></revenue-model-panel>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,1 @@
+ALTER TABLE products ADD COLUMN locked_user_id VARCHAR(255) NULL;

@@ -1,0 +1,150 @@
+<!-- START site-settings -->
+<div class="row">
+    <div class="col-lg-12">
+		<ul class="breadcrumb text-asbestos no-margin no-padding" style="padding: 0 !important; margin: 0 !important">
+			<li ng-if="parentNetwork != null"><h3 class="page-header-nomargin text-asbestos" ><a href="#/network/{{network.id}}">{{parentNetwork.name}}</a></h3></li>
+			<li ng-if="parentNetwork == null"><h3 class="page-header-nomargin text-asbestos" ><a href="#/publishers">Red Panda Marketplace</a></h3></li>
+			<li ng-if="currentSite.account_id" ><h3 class="page-header-nomargin text-asbestos">Publishers</h3></li>
+			<li ng-if="currentSite.account_id" ><h3 class="page-header-nomargin text-asbestos">{{currentSite.account_name}} </h3></li>
+			<li ng-if="!currentSite.account_id" ><h3 class="page-header-nomargin text-asbestos">All Publishers </h3></li>
+			<li ng-if="currentSite.id" ><h3 class="page-header-nomargin text-asbestos">{{ currentSite.id}} </h3></li>
+				<li ng-if="currentSite.id"><h3 class="page-header-nomargin text-asbestos"> Site Settings</h3></li>
+			<li ng-if="!currentSite.id" ><h3 class="page-header-nomargin text-asbestos">Create Site</h3></li>
+		</ul>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="alert alert-success" ng-if="showSaveSuccess"><strong>Site Saved</strong> The site has been saved with the updated information.</div>
+        <div class="alert alert-danger" ng-if="showSaveError"><strong>Error</strong> There was an error when saving the site: {{errorMsg}}</div>
+    </div>
+</div>
+
+<div ng-if="user.accountType == 'ROOT' && currentSite.redpanda_linked_site_id != null">Sites were created through linked <a href="#/tagsettings/{{currentSite.redpanda_linked_site_id}}">Red Panda Site # {{publisher.redpanda_linked_site_id}}</a></div>
+<div ng-if="user.accountType == 'ROOT' && currentSite.marketplace_linked_site_id != null">Linked <a href="#/tagsettings/{{currentSite.marketplace_linked_site_id}}">Marketplace Site # {{publisher.marketplace_linked_site_id}}</a></div>
+
+<div class="panel panel-default">
+	<div class="panel-body">
+		<form name="siteForm" role="form" class="form-horizontal">
+
+			<div class="form-group">
+				<label for="site-name" class="col-sm-2 control-label">Site Name</label>
+				<div class="col-sm-10" ng-class="{'has-error': siteForm.siteName.$invalid}">
+					<input type="text" class="form-control" name="siteName" placeholder="Enter Site Name"
+						ng-model="currentSite.site_name" required id="site-name" />
+				</div>
+			</div>
+
+            <div  class="form-group has-feedback" ng-if="hasRole('SUPER_USER') && !currentSite.account_id" ng-class="{'has-error': publisherNameInvalid}" >
+                <label for="accountName" class="col-sm-2 control-label">Publisher</label>
+                <div class="col-sm-10" ng-class="{'has-error': siteForm.accountName.$invalid}" >
+					<span id="accountName">
+						<input ng-if="!initialPublisherId" type="text" class="form-control" placeholder="Enter Publisher Name" ng-model="currentSite.account_name" ng-typeahead url="{{publisherQuery}}" filter="onPublisherFilter(parsedResponse)" required>
+						<span ng-if="initialPublisherId">{{currentSite.account_name}}</span>
+					</span>
+                </div>
+            </div>
+
+			 <div class="form-group">
+				<label for="site-url" class="col-sm-2 control-label">Site URL  <i ng-if="siteForm.siteUrl.$invalid" class="fa fa-1x fa-exclamation-triangle red"></i></label>
+				<div class="col-sm-10" ng-class="{'has-error': siteForm.siteUrl.$invalid}">
+					<input type="text" class="form-control" name="siteUrl" placeholder="Enter Site URL" ng-model="currentSite.site_url"
+						required id="site-url" />
+				</div>
+			</div>
+
+			 <div class="form-group" ng-if="currentSite.id">
+				<label for="contact-name" class="col-sm-2 control-label">Contact Name</label>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" name="contactName" placeholder="Enter Contact Name"
+						ng-model="currentSite.contact_name" id="contact-name" />
+				</div>
+			</div>
+
+			<div class="form-group" ng-if="currentSite.id">
+				<label for="contact-email" class="col-sm-2 control-label">Contact Email</label>
+				<div class="col-sm-10" ng-class="{'has-error': siteForm.contactEmail.$invalid}">
+					<input type="email" class="form-control" name="contactEmail" placeholder="Enter Contact Email"
+						ng-model="currentSite.contact_email" /> <span class="help-block" ng-show="siteForm.contactEmail.$error.email" id="contact-email">Please
+						enter a valid email</span>
+				</div>
+			</div>
+
+			<div class="form-group" ng-if="currentSite.id">
+				<label for="site-language" class="col-sm-2 control-label">Language</label>
+				<div class="col-sm-4" ng-class="{'has-error': siteForm.siteLanguage.$invalid}">
+					<select class="form-control" name="siteLanguage" ng-model="currentSite.site_language"
+						ng-options="language.id as language.name for language in siteLanguages" required id="site-language"/>
+				</div>
+			</div>
+
+			<div class="form-group" ng-if="currentSite.id">
+				<label for="site-country" class="col-sm-2 control-label">Country</label>
+				<div class="col-sm-4" ng-class="{'has-error': siteForm.siteCountry.$invalid}">
+					<select class="form-control" name="siteCountry" ng-model="currentSite.site_country"
+							ng-options="country.id as country.name for country in siteCountries" required id="site-country"/>
+				</div>
+			</div>
+
+			<div class="form-group" ng-if="currentSite.id">
+				<label for="site-type" class="col-sm-2 control-label">Site Type</label>
+				<div class="col-sm-4" ng-class="{'has-error': siteForm.siteType.$invalid}">
+					<select class="form-control" name="siteType" ng-model="currentSite.site_type"
+							ng-options="type.id as type.name for type in siteTypes" required id="site-type"/>
+				</div>
+			</div>
+
+
+			<div class="form-group" ng-if="currentSite.id">
+				<label for="traffic-estimate" class="col-sm-2 control-label">Traffic Estimate</label>
+				<div class="col-sm-4" ng-class="{'has-error': siteForm.trafficEstimate.$invalid}">
+					<select class="form-control" name="trafficEstimate" ng-model="currentSite.traffic_estimate"
+							ng-options="estimate.id as estimate.name for estimate in trafficEstimates" required id="traffic-estimate"/>
+				</div>
+			</div>
+
+			<div class="form-group" ng-if="currentSite.id">
+				<label for="SiteNotes" class="col-sm-2 control-label">Site Notes</label>
+				<div class="col-sm-10">
+					<textarea class="form-control" id="SiteNotes" placeholder="Important notes about site, visible to all users!" ng-model="currentSite.site_notes" ></textarea>
+				</div>
+			</div>
+
+			<div class="form-group" ng-if="hasRole('INTERNAL_USER') && currentSite.id">
+				<label for="InternalNotes" class="col-sm-2 control-label">Red Panda Internal Notes</label>
+				<div class="col-sm-10">
+					<textarea class="form-control" id="InternalNotes" placeholder="Internal-only notes here, visible to super-users only" ng-model="currentSite.internal_notes" ></textarea>
+				</div>
+			</div>
+
+<!--
+			<div class="form-group" ng-if="!currentSite.id && hasRole('SUPER_USER')">
+				<label for="make-custom" class="col-sm-2 control-label">Media Portal</label>
+				<div class="col-sm-10">
+					<input type="checkbox" name="makeCustom"
+						   ng-model="currentSite.custom_site" id="make-custom">
+				</div>
+			</div> -->
+		</form>
+
+	</div>
+</div>
+
+<div class="row">
+    <div class="pull-left">
+        <button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
+    </div>
+    <div class="pull-right">
+        <button type="button" class="btn btn-primary" ng-click="updateSite()" ng-disabled="!siteForm.$valid || !currentSite.id || disableSubmit" ng-show="currentSite.id" >
+			<span ng-show="!disableSubmit">Update Site</span>
+			<span ng-hide="!disableSubmit"><i class="fa fa-1x fa-cog fa-spin"></i> Update Site</span>
+		</button>
+		<button type="button" class="btn btn-primary" ng-click="createSite()" ng-disabled="!siteForm.$valid || disableSubmit" ng-show="!currentSite.id" >
+			<span ng-show="!disableSubmit">Create New Site</span>
+			<span ng-hide="!disableSubmit"><i class="fa fa-1x fa-cog fa-spin"></i> Creating Site</span>
+		</button>
+        <button type="button" class="btn btn-default" ng-click="createSiteAndCreateNew()" ng-disabled="!siteForm.$valid || disableSubmit" ng-show="!currentSite.id" >Save &amp; Create New</button>
+    </div>
+</div>
+<!-- END site-settings -->

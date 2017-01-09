@@ -1,0 +1,1 @@
+UPDATE sites SET traffic_estimate = '_0_TO_1MM' WHERE traffic_estimate = '0_TO_1MM';

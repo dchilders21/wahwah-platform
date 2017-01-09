@@ -1,0 +1,1 @@
+ALTER TABLE product_standalone_ad DROP COLUMN widget_id;

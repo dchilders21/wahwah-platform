@@ -1,0 +1,20 @@
+ALLSCREEN,Allscreen,{"user":"Username","password":"Password"}
+AOL_ONE_VIDEO,ONE by AOL: Video,{"user":"Username","password":"Password"}
+ALTITUDE_DIGITAL,Altitude Digital,{"user":"Username","password":"Password"}
+CRITEO,Criteo for Publishers,{"api_key":"API Key"}
+GOOGLE_ADSENSE,Google AdSense,{}
+GOOGLE_ADX,Doubleclick Ad Exchange,{}
+INDEX_EXCHANGE,Index Exchange,{"user":"Username","api_key":"API Key"}
+MONARCH_ADS,Monarch Ads,{"user":"Username","password":"Password"}
+MYSPACE_VINDICO_VOX,MySpace,{"user":"Username","password":"Password"}
+RED_PANDA_MARKETPLACE,Red Panda Marketplace,{}
+RUBICON_PROJECT,Rubicon Project,{"user":"Username","password":"Password"}
+PULSEPOINT,Pulsepoint,{"user":"Username","password":"Password"}
+SPRINGSERVE,SpringServe,{}
+TEADS_MANAGED,Teads.tv Managed Services,{"user":"Username","password":"Password"}
+TREMOR_MEDIA,Tremor Media,{"user":"Username","password":"Password"}
+VIROOL,Virool,{"user":"Username","password":"Password"}
+UNDERTONE,Undertone,{"user":"Username","password":"Password"}
+FB_AUDIENCE_NETWORK,Facebook Audience Network,{"app_id":"Facebook App ID","access_token":"Access Token"}
+ADFORGEINC,AdForge,{"instance_url":"Instance URL","user":"Username","password":"Password"}
+PUBMATIC,Pubmatic,{"user":"Username","password":"Password"}

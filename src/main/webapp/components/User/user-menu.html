@@ -1,0 +1,19 @@
+<li class="dropdown navbar-right platform-dropdown top-level">
+    <a class="dropdown-toggle" data-toggle="dropdown">
+        <i class="fa fa-user fa-2x fa-fw"></i>
+    </a>
+    <ul class="dropdown-menu dropdown-user">
+        <li ng-if="$ctrl.showImpersonationMenu"><a role="button" ng-click="$ctrl.showImpersonationDialog()"><i class="fa fa-users fa-fw"></i> Logged in as {{$ctrl.realUser}}</a></li>
+        <li ng-if="!$ctrl.showImpersonationMenu"><a role="button"><i class="fa fa-users fa-fw"></i> Logged in as {{$ctrl.realUser}}</a></li>
+        <li ng-if="$ctrl.impersonationUser"><em style="margin-left: 30px">as {{$ctrl.impersonationUser}}</em></li>
+        <li><a href="#/profile"><i class="fa fa-user fa-fw"></i> User Profile</a></li>
+        <li><a role="button" data-toggle="modal" data-target="#supportModal"><i class="fa fa-life-ring fa-fw"></i> Get Help</a></li>
+        <li><a role="button"><img ng-src="{{$ctrl.logoUrl}}" class="fa-fw"> Red Panda Platform {{$ctrl.appVersion}}</a></li>
+        <li class="divider"></li>
+        <li><a href="/useraccount/logout"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+        </li>
+    </ul>
+<!-- /.dropdown-user -->
+</li>
+
+<impersonation-dialog real-user-obj="$ctrl.realUserObj" impersonation-users="$ctrl.impersonationUsers" selected-impersonation-user="$ctrl.selectedImpersonationUser" is-impersonated="$ctrl.isImpersonated" impersonation-user="$ctrl.impersonationUser" visible="$ctrl.isImpersonationDialogVisible" on-close="$ctrl.hideImpersonationDialog()"></impersonation-dialog>

@@ -1,0 +1,150 @@
+<div ng-if="$ctrl.isTestingCredentials">
+    <div style="position: absolute; z-index: 1000; margin-left: -30px; top: 0px; left: 0px; min-width: 100vmax; height: 100vmax; background-color: rgba(30,30,50,0.3);"></div>
+    <div style="position: absolute; z-index: 1001; top: 0px; left: 0px; min-width: 100%; height: 100vh; background-color: transparent">
+        <div style="position: absolute; z-index: 1002; left: 50%; top: 50%; margin-left: -35px; margin-top: -40px;">
+            <i class="fa fa-4x fa-spinner fa-spin"></i>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <ul class="breadcrumb no-margin no-padding text-asbestos">
+            <li><h3 class="page-header-nomargin text-asbestos"><a href="#/demand-sources">Demand Sources</a></h3></li>
+            <li><h3 class="page-header-nomargin text-asbestos">Create New</h3></li>
+        </ul>
+    </div>
+</div>
+
+<br />
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="alert alert-success" ng-if="$ctrl.showSaveSuccess"><strong>Demand Source Saved</strong> The demand source has been updated</div>
+    </div>
+</div>
+
+
+<div class="row" ng-if="!$ctrl.isCreating">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Demand Source Information</h3>
+        </div>
+        <div class="panel-body">
+
+            <p ng-if="$ctrl.showVASTWarning"><strong>NOTICE:</strong> This form should only be used for creating demand sources that only traffic VAST tags. If the demand source will be used for display tags as well, please do not use this form and instead contact <a role="button" data-toggle="modal" data-target="#supportModal">Red Panda Support</a> and request that an advertiser is setup in the Red Panda Display Ad Server. </p>
+
+            <form role="form" class="form" name="profileForm">
+                <div class="form-group">
+                    <label for="name" class="control-label">Name</label>
+                    <input type="text" class="form-control" id="name" placeholder="Enter Demand Source Name" ng-model="$ctrl.demandSource.name">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="row" ng-if="!$ctrl.isCreating">
+    <div class="col-lg-12">
+        <form role="form" class="form">
+            <div class="form-group">
+                <button type="button" class="btn btn-primary pull-right" ng-click="$ctrl.save()">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="row" ng-if="$ctrl.isCreating">
+    <div class="panel panel-default panel-mini">
+        <div class="panel-heading">
+            <h3 class="panel-title">Choose Demand Source</h3>
+        </div>
+        <div class="panel-body">
+
+            <!-- <p>Please select from the following providers:</p> -->
+
+            <form role="form" class="form-horizontal" name="demandSourceSelection">
+                <div class="form-group demand-form">
+                    <label for="demand-source" class="col-sm-2 control-label">Demand Source</label>
+                    <div class="col-sm-4">
+                        <select class="form-control" name="siteType" ng-model="$ctrl.selectedPopularDemandSource" ng-options="demandSource.demand_source_name for demandSource in $ctrl.popularDemandSources | orderBy: 'demand_source_name'" id="demand-source" ng-change="$ctrl.setConnectionParams()"/>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="row" ng-if="$ctrl.isCreating && $ctrl.selectedPopularDemandSource && !($ctrl.selectedPopularDemandSource.is_request || $ctrl.selectedPopularDemandSource.connection_type_key == 'OTHER')">
+    <div class="panel panel-default panel-mini">
+        <div class="panel-heading">
+            <h3 class="panel-title">Connection Information</h3>
+        </div>
+
+        <div class="panel-body">
+            <form role="form" class="form-horizontal" name="demandSourceConnectionForm">
+                <div class="form-group demand-form" ng-repeat="(key,value) in $ctrl.connectionTypes[$ctrl.selectedPopularDemandSource.connection_type_key].connection_metadata">
+                    <label for="type-field-{{key}}" class="col-sm-2 control-label">{{value}}</label>
+                    <div class="col-sm-10">
+                        <input placeholder="{{value}}" class="form-control" id="type-field-{{key}}" type="text" ng-model="$ctrl.connectionTypeFields[key]" required>
+                    </div>
+                </div>
+
+                <div class="form-group" ng-if="!$ctrl.connectionTypes[$ctrl.selectedPopularDemandSource.connection_type_key].needs_auth">
+                    <button type="button" class="btn btn-default" ng-click="$ctrl.validateCredentials()" ng-disabled="!demandSourceConnectionForm.$valid || $ctrl.isTestingCredentials">Test Credentials</button>
+                    <button type="button" class="btn btn-primary" ng-click="$ctrl.saveNewConnection()" ng-disabled="!demandSourceConnectionForm.$valid">Save Demand Source Connection</button>
+                </div>
+
+                <div class="form-group" ng-if="$ctrl.connectionTypes[$ctrl.selectedPopularDemandSource.connection_type_key].needs_auth">
+                    <button type="button" class="btn btn-primary" ng-click="$ctrl.authorizeAccess()" ng-disabled="!demandSourceConnectionForm.$valid">Authorize Access</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="row" ng-if="$ctrl.isCreating && ($ctrl.selectedPopularDemandSource.is_request || $ctrl.selectedPopularDemandSource.connection_type_key == 'OTHER')">
+    <div class="panel panel-default panel-mini">
+        <div class="panel-body">
+
+            <p ng-if="$ctrl.selectedPopularDemandSource.is_request">Need a Demand Source that isn't listed already? Red Panda Platform will evaluate the level of effort to integrate your demand source. We will contact you when your integration is ready!</p>
+
+            <form name="demandSourceRequestForm" class="form-horizontal" role="form">
+
+                <div class="form-group demand-form" ng-if="$ctrl.selectedPopularDemandSource.is_request">
+                    <label for="demand-source-name" class="col-sm-2 control-label">Name</label>
+                    <div class="col-sm-10">
+                        <input placeholder="Enter Demand Source Name" class="form-control" id="demand-source-name" type="text" ng-model="$ctrl.demandSourceToRequest.name" required>
+                    </div>
+                </div>
+
+                <div class="form-group demand-form">
+                    <label for="demand-source-login-url" class="col-sm-2 control-label">Login URL</label>
+                    <div class="col-sm-10">
+                        <input placeholder="Enter Login URL" class="form-control" id="demand-source-login-url" type="text" ng-model="$ctrl.demandSourceToRequest.loginUrl" required>
+                    </div>
+                </div>
+
+                <div class="form-group demand-form">
+                    <label for="demand-source-username" class="col-sm-2 control-label">Username</label>
+                    <div class="col-sm-10">
+                        <input placeholder="Enter Username" class="form-control" id="demand-source-username" type="text" ng-model="$ctrl.demandSourceToRequest.username" required>
+                    </div>
+                </div>
+
+                <div class="form-group demand-form">
+                    <label for="demand-source-password" class="col-sm-2 control-label">Password</label>
+                    <div class="col-sm-10">
+                        <input placeholder="Enter Password" class="form-control" id="demand-source-password" type="text" ng-model="$ctrl.demandSourceToRequest.password" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <button type="button" class="btn btn-primary" ng-click="$ctrl.sendDemandSourceRequest()" ng-disabled="!demandSourceRequestForm.$valid">Submit Request</button>
+                </div>
+
+
+            </form>
+        </div>
+    </div>
+</div>

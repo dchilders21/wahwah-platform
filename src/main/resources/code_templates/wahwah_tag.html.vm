@@ -1,0 +1,20 @@
+<!-- START RED PANDA CONTENT -->
+<!-- Instructions: Place the following in the $tag.instructionsPagePosition -->
+<!-- RP $tag.productTypeDescription [ Name: $tag.productName ] [Publisher: $tag.publisherName ] [Site: $tag.siteName ] [Tag id: $tag.productId ] [Widget id: $tag.widgetId ] -->
+
+#if($tag.clientFeatures.containsKey("customPublisherReportKeys"))
+<script type="text/javascript">
+<!-- This tag has custom publisher keys enabled. Please set the following key-value pairs -->
+<!-- The following macros are available: #[[ $$ ]]#,#[[ ${REFERRER} ]]#,#[[ ${DOMAIN} ]]# -->
+var RP_PUBLISHER_KEYS = {};
+#foreach($publisherKey in $tag.clientFeatures.get('customPublisherReportKeys').valueString.split(';'))
+RP_PUBLISHER_KEYS['$publisherKey'] = '%% VALUE GOES HERE %%';
+#end
+</script>
+#end
+
+<script>
+    var RP_TAG_ID = 'rp-widget-script-$tag.widgetId';
+</script>
+<script type="text/javascript" src="$tag.objectPath" id="rp-widget-script-$tag.widgetId"></script>
+<!-- END RED PANDA CONTENT -->

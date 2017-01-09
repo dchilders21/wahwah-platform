@@ -1,0 +1,2 @@
+ALTER TABLE line_items MODIFY COLUMN site_id INT NULL;
+ALTER TABLE line_items MODIFY COLUMN publisher_id INT NULL;

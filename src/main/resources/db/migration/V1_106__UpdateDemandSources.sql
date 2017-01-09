@@ -1,0 +1,1 @@
+ALTER TABLE demand_sources MODIFY COLUMN account_id INT NULL;

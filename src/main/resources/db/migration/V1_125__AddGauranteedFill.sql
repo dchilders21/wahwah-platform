@@ -1,0 +1,1 @@
+ALTER TABLE publisher_revenue_model ADD COLUMN is_guaranteed_fill BOOLEAN NOT NULL DEFAULT FALSE;

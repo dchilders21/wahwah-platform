@@ -1,0 +1,1 @@
+ALTER TABLE sites CHANGE user_notes site_notes text;

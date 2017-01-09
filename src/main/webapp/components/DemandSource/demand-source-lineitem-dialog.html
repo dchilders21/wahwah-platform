@@ -1,0 +1,22 @@
+<ng-tabs tabs="$ctrl.tabs" selected-tab="$ctrl.currentTab" tab-label="name" tab-select="$ctrl.setCurrentTab(tab)"></ng-tabs>
+
+<div class="tab-content">
+
+    <div id="line-item-dialog-info" class="tab-pane fade" ng-class="{active: $ctrl.currentTab.id == 'line-item-info',in: $ctrl.currentTab.id == 'line-item-info'}">
+        <demand-source-line-item-info-panel line-item="$ctrl.lineItem" creatives="$ctrl.creatives"></demand-source-line-item-info-panel>
+    </div>
+
+    <div id="line-item-dialog-targeting" class="tab-pane fade" ng-class="{active: $ctrl.currentTab.id == 'line-item-targeting',in: $ctrl.currentTab.id == 'line-item-targeting'}">
+        <demand-source-line-item-targeting-panel line-item="$ctrl.lineItem" creatives="$ctrl.creatives"></demand-source-line-item-targeting-panel>
+    </div>
+
+    <div id="line-item-dialog-ads" class="tab-pane fade" ng-class="{active: $ctrl.currentTab.id == 'line-item-ads',in: $ctrl.currentTab.id == 'line-item-ads'}">
+        <demand-source-line-item-ad line-item="$ctrl.lineItem" ads="$ctrl.lineItem.ads" creatives="$ctrl.creatives"></demand-source-line-item-ad>
+    </div>
+
+    <div id="line-item-dialog-advanced" class="tab-pane fade" ng-class="{active: $ctrl.currentTab.id == 'line-item-advanced',in: $ctrl.currentTab.id == 'line-item-advanced'}">
+        <demand-source-line-item-advanced-panel line-item="$ctrl.lineItem"></demand-source-line-item-advanced-panel>
+    </div>
+
+
+</div>

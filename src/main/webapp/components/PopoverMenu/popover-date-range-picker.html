@@ -1,0 +1,7 @@
+<popover-list-link title="{{$ctrl.title}}" source="$ctrl.dateRanges" list-item-name="name" list-item-select="$ctrl.selectDateRange(item)"><strong>{{$ctrl.selectedDateRange.name}}</strong></popover-list-link>
+<span ng-if="$ctrl.selectedDateRange.isCustom">
+            from
+            <strong><popover-date-picker-link title="Start Date" date="$ctrl.startDate" end-date="$ctrl.endDate">{{$ctrl.startDate}}</popover-date-picker-link></strong>
+            to
+            <strong><popover-date-picker-link title="End Date" date="$ctrl.endDate" start-date="$ctrl.startDate" end-date="$ctrl.todayDate">{{$ctrl.endDate}}</popover-date-picker-link></strong>
+</span>

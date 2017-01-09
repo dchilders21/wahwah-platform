@@ -1,0 +1,46 @@
+<div class="row">
+    <div class="col-lg-12">
+
+        <ul class="breadcrumb no-margin no-header text-asbestos">
+            <li><h3 class="page-header-nomargin text-asbestos">Ad Ops</h3></li>
+            <li><h3 class="page-header-nomargin text-asbestos">Line Item Mappings</h3></li>
+        </ul>
+    </div>
+</div>
+
+<a id="top"></a>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="alert alert-success" ng-if="showLineItemsUpdatedAlert"><strong>Line Items Updated</strong> The demand partner has been updated for all line items below.</div>
+        <div class="alert alert-warning" ng-if="isSaving"><strong>Line Items Updating</strong> Demand Partners are being updated. This might take a minute or two.</div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default" ng-if="lineItems.length > 0">
+
+            <div class="panel-heading">Line Items</div>
+
+            <table class="table table-bordered">
+                <thead>
+                <tr><th>Ad Server</th><th>Ad Server ID</th><th>Demand Partner</th><th>Line Item Name</th></tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="row in lineItems">
+                    <td>{{adServers[row.adServerType]}}</td>
+                    <td>{{row.externalId}}</td>
+                    <td><select ng-options="item.id as item.name for item in demandPartners" ng-model="row.demandPartnerId"></select></td>
+                    <td>{{row.name}}</td>
+                </tr>
+                </tbody>
+            </table>
+
+            <div class="panel-footer" style="text-align: right">
+                <button class="btn btn-primary" ng-click="save()" ng-disabled="isSaving">Save</button>
+            </div>
+        </div>
+    </div>
+</div>

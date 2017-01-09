@@ -1,0 +1,110 @@
+@charset "UTF-8";
+
+html, body {height: 100%;}
+
+body { margin: 0;}
+
+html {
+  background: url('../images/blue.png') no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+#container {
+  width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  min-height: 100%;
+}
+#logo {
+  float:left;
+  width: 400px;
+}
+#nav {
+  float:right;
+  padding:20px;
+  width:570px;
+  /*height:53px;*/
+  color:white;
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+}
+div.box {
+  float: left;
+  width: 70px;
+  margin-top: 18px;
+  text-align: center;
+}
+
+h1 {
+  font-family: 'Roboto', sans-serif;
+  font-size: 24px;
+  color: #fff;
+  padding-top:20px;
+}
+
+p {
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  color: #fff;
+  line-height: 26px;
+}
+
+li {
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  color: #fff;
+  line-height: 26px;
+}
+#search {
+  float:right;
+  padding:20px;
+}
+#imgheader {
+  padding:0px;
+  background-color: #666;
+  text-align: center;
+  height: 250px;
+  clear: both;
+}
+#main {
+  width:830px;
+  float:left;
+  overflow:auto;
+  padding-bottom: 15px;
+}
+#RTgutter {
+  width:300px;
+  margin-left:20px;
+  float:right;
+  margin-top:45px;
+}
+
+#ad {
+  width: 300px;
+  height: 250px;
+  margin-bottom: 20px;
+  background-color: #e55445;
+}
+
+#footer {
+  background-color: #e55445;
+  clear:both;
+  margin-left: auto;
+  margin-right: auto;
+  text-align:center;
+  padding:20px;
+  font-size: 11px;
+  font-family: 'Roboto', sans-serif;
+  position: relative;
+  margin-top: -15px; /* negative value of footer height */
+  height: 15px;
+  color: #fff;
+  clear:both;
+}
+
+p.redpandaAd {
+  text-align: center;
+}
